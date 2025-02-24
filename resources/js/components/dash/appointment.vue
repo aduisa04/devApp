@@ -85,7 +85,13 @@
       <div class="main-content">
         <header class="header">
           <div class="search-container">
-            <input type="text" placeholder="Search" class="search-input" />
+            <input 
+              type="text" 
+              v-model="searchQuery" 
+              @input="filterAppointments"
+              placeholder="Search by name, phone, treatment..." 
+              class="search-input" 
+            />
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd078eb6f9ce86265999269e4046c2dcec9bec7d140ae886d7ae3f419a2c7a16?placeholderIfAbsent=true&apiKey=02853cff8a504be0a91f61afb8cdbbcd"
               alt="Search icon"
@@ -134,7 +140,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="appointment in appointments" :key="appointment.id">
+            <tr v-for="appointment in displayedAppointments" :key="appointment.id">
               <td>{{ appointment.name }}</td>
               <td>{{ appointment.phone }}</td>
               <td>{{ appointment.date }} {{ appointment.time }}</td>
@@ -169,19 +175,15 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      appointments: [], // This will hold the fetched appointments
-      doctors: [] // This will hold the fetched list of doctors
+      appointments: [], // All appointments
+      displayedAppointments: [], // Filtered appointments to display
+      searchQuery: '',
+      doctors: [],
     };
   },
   mounted() {
     // Fetch appointments from the API when the component is mounted
-    axios.get('/api/appointments')
-      .then(response => {
-        this.appointments = response.data; // Set the appointments data
-      })
-      .catch(error => {
-        console.error('There was an error fetching appointments:', error);
-      });
+    this.fetchAppointments();
 
     // Fetch doctors from the API
     axios.get('/api/doctors')
@@ -193,6 +195,36 @@ export default {
       });
   },
   methods: {
+    // Fetch all appointments from the API
+    async fetchAppointments() {
+      try {
+        const response = await axios.get('/api/appointments');
+        this.appointments = response.data;
+        this.displayedAppointments = response.data; // Initially show all appointments
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    },
+
+    // Filter appointments based on search query
+    filterAppointments() {
+      if (!this.searchQuery) {
+        this.displayedAppointments = this.appointments;
+        return;
+      }
+
+      const query = this.searchQuery.toLowerCase();
+      this.displayedAppointments = this.appointments.filter(appointment => {
+        return (
+          appointment.name?.toLowerCase().includes(query) ||
+          appointment.phone?.toLowerCase().includes(query) ||
+          appointment.treatment?.toLowerCase().includes(query) ||
+          appointment.status?.toLowerCase().includes(query) ||
+          appointment.date?.toLowerCase().includes(query)
+        );
+      });
+    },
+
     toggleDoctorDropdown(appointment) {
       // Toggle the visibility of the doctor dropdown for the selected appointment
       this.appointments.forEach(app => {

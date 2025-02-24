@@ -85,7 +85,7 @@
     <div class="main-content">
       <header class="header">
         <div class="search-container">
-          <input type="text" placeholder="Search" class="search-input" />
+          <input type="text" v-model="searchQuery" @input="filterDoctors" placeholder="Search" class="search-input" />
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd078eb6f9ce86265999269e4046c2dcec9bec7d140ae886d7ae3f419a2c7a16?placeholderIfAbsent=true&apiKey=02853cff8a504be0a91f61afb8cdbbcd"
             alt="Search icon"
@@ -134,7 +134,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="doctor in filteredDoctors" :key="doctor.id">
+            <tr v-for="doctor in displayedDoctors" :key="doctor.id">
               <td>{{ doctor.name }}</td>
               <td>{{ doctor.number }}</td>
               <td>{{ doctor.email }}</td>
@@ -158,41 +158,55 @@ export default {
   data() {
     return {
       doctors: [],
-      searchTerm: '',
+      displayedDoctors: [],
+      searchQuery: '',
     };
   },
-  computed: {
-    filteredDoctors() {
-      return this.doctors.filter(doctor =>
-        doctor.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
+  
+  methods: {
+    async fetchDoctors() {
+      try {
+        const response = await axios.get('/api/doctors');
+        this.doctors = response.data;
+        this.displayedDoctors = response.data;
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    },
+
+    filterDoctors() {
+      if (!this.searchQuery) {
+        this.displayedDoctors = this.doctors;
+        return;
+      }
+
+      const query = this.searchQuery.toLowerCase();
+      this.displayedDoctors = this.doctors.filter(doctor => {
+        return (
+          doctor.name?.toLowerCase().includes(query) ||
+          doctor.email?.toLowerCase().includes(query) ||
+          doctor.number?.toLowerCase().includes(query) ||
+          doctor.address?.toLowerCase().includes(query)
+        );
+      });
+    },
+
+    async deleteDoctor(id) {
+      try {
+        if (confirm('Are you sure you want to delete this doctor?')) {
+          await axios.delete(`/api/doctors/${id}`);
+          this.fetchDoctors(); // Refresh the list after deletion
+          alert('Doctor deleted successfully');
+        }
+      } catch (error) {
+        console.error('Error deleting doctor:', error);
+      }
+    },
+    editDoctor(id) {
+      // Redirect to an edit page with the doctor's ID
+      this.$router.push({ name: 'EditDoctor', params: { id } });
     },
   },
-  methods: {
-  async fetchDoctors() {
-    try {
-      const response = await axios.get('/api/doctors');
-      this.doctors = response.data;
-    } catch (error) {
-      console.error('Error fetching doctors:', error);
-    }
-  },
-  async deleteDoctor(id) {
-    try {
-      if (confirm('Are you sure you want to delete this doctor?')) {
-        await axios.delete(`/api/doctors/${id}`);
-        this.fetchDoctors(); // Refresh the list after deletion
-        alert('Doctor deleted successfully');
-      }
-    } catch (error) {
-      console.error('Error deleting doctor:', error);
-    }
-  },
-  editDoctor(id) {
-    // Redirect to an edit page with the doctor's ID
-    this.$router.push({ name: 'EditDoctor', params: { id } });
-  },
-},
 
   mounted() {
     this.fetchDoctors();
@@ -577,4 +591,5 @@ body {
 
 
 </style>
+  
   

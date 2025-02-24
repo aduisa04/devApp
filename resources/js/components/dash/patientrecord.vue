@@ -85,7 +85,7 @@
       <div class="main-content">
         <header class="header">
           <div class="search-container">
-            <input type="text" placeholder="Search" class="search-input" />
+            <input type="text" v-model="searchQuery" @input="filterPatients" placeholder="Search" class="search-input" />
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/cd078eb6f9ce86265999269e4046c2dcec9bec7d140ae886d7ae3f419a2c7a16?placeholderIfAbsent=true&apiKey=02853cff8a504be0a91f61afb8cdbbcd"
               alt="Search icon"
@@ -139,7 +139,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="patient in patients" :key="patient.id">
+          <tr v-for="patient in displayedPatients" :key="patient.id">
             <td>{{ patient.name }}</td>
             <td>{{ patient.phone }}</td>
             <td>{{ patient.pet }}</td>
@@ -164,22 +164,63 @@ export default {
   data() {
     return {
       patients: [],
+      displayedPatients: [],
+      searchQuery: '',
       loading: true,
     };
   },
-  mounted() {
-    this.fetchPatientRecords();
-  },
+  
   methods: {
     async fetchPatientRecords() {
       try {
         const response = await axios.get('/api/patient-records');
+        console.log('Fetched data:', response.data); // Debug log
         this.patients = response.data;
+        this.displayedPatients = [...response.data]; // Make a copy
       } catch (error) {
-        console.error("Error fetching patient records:", error);
+        console.error('Error fetching patient records:', error);
       } finally {
         this.loading = false;
       }
+    },
+
+    filterPatients() {
+      console.log('Filtering with query:', this.searchQuery); // Debug log
+      if (!this.searchQuery) {
+        this.displayedPatients = [...this.patients];
+        return;
+      }
+
+      const query = this.searchQuery.toLowerCase().trim();
+      this.displayedPatients = this.patients.filter(patient => {
+        const searchFields = [
+          patient.name,
+          patient.phone,
+          patient.pet,
+          patient.breed,
+          patient.pet_name,
+          patient.treatment
+        ];
+        
+        return searchFields.some(field => 
+          String(field || '').toLowerCase().includes(query)
+        );
+      });
+      console.log('Filtered patients:', this.displayedPatients); // Debug log
+    }
+  },
+
+  mounted() {
+    this.fetchPatientRecords();
+  },
+
+  // Add watcher for searchQuery
+  watch: {
+    searchQuery: {
+      handler(newVal) {
+        this.filterPatients();
+      },
+      immediate: true
     }
   }
 };
