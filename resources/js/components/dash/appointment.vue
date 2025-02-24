@@ -149,17 +149,19 @@
               <td>{{ appointment.clinic_id }}</td>
               
               <td>
-                <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
-                  Assign
-                </button>
-                <div v-if="appointment.showDoctorDropdown" class="doctor-dropdown">
-                  <ul>
-                    <li v-for="doctor in doctors" :key="doctor.id" @click="assignDoctor(appointment, doctor)">
-                      {{ doctor.name }}
-                    </li>
-                  </ul>
+                <div class="action-buttons">
+                  <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
+                    Assign
+                  </button>
+                  <div v-if="appointment.showDropdown" class="doctor-dropdown">
+                    <ul>
+                      <li v-for="doctor in doctors" :key="doctor.id" @click="assignDoctor(appointment, doctor)">
+                        {{ doctor.name }}
+                      </li>
+                    </ul>
+                  </div>
+                  <button class="cancel-btn" @click="cancelAppointment(appointment)">Cancel</button>
                 </div>
-                <button class="cancel-btn" @click="cancelAppointment(appointment)">Cancel</button>
               </td>
             </tr>
           </tbody>
@@ -226,23 +228,61 @@ export default {
     },
 
     toggleDoctorDropdown(appointment) {
-      // Toggle the visibility of the doctor dropdown for the selected appointment
+      // Close all other dropdowns
       this.appointments.forEach(app => {
-        if (app.id !== appointment.id) {
-          app.showDoctorDropdown = false; // Close other dropdowns
+        if (app !== appointment) {
+          this.$set(app, 'showDropdown', false);
         }
       });
-      appointment.showDoctorDropdown = !appointment.showDoctorDropdown;
+      // Toggle the clicked appointment's dropdown
+      this.$set(appointment, 'showDropdown', !appointment.showDropdown);
     },
-    assignDoctor(appointment, doctor) {
-      // Assign the selected doctor to the appointment
-      appointment.doctor = doctor.name; // Using doctor name here
-      appointment.showDoctorDropdown = false; // Close the dropdown after assigning
+
+    async assignDoctor(appointment, doctor) {
+      try {
+        await axios.put(`/api/appointments/${appointment.id}`, {
+          doctor_id: doctor.id,
+          status: 'Assigned'
+        });
+
+        // Update the appointment locally
+        appointment.doctor_id = doctor.id;
+        appointment.status = 'Assigned';
+        appointment.showDropdown = false;
+
+        alert('Doctor assigned successfully!');
+      } catch (error) {
+        alert('Failed to assign doctor');
+        console.error(error);
+      }
     },
-    cancelAppointment(appointment) {
-      // Change the appointment status to 'Cancelled'
-      //adwdawdkjawdkjahwkdjhakjdhakwjhdkjawhdjk
-      appointment.status = 'Cancelled';
+
+    async cancelAppointment(appointment) {
+      if (!confirm('Are you sure you want to cancel this appointment?')) {
+        return;
+      }
+
+      try {
+        await axios.put(`/api/appointments/${appointment.id}`, {
+          status: 'Cancelled'
+        });
+
+        // Update the appointment locally
+        appointment.status = 'Cancelled';
+        alert('Appointment cancelled successfully!');
+      } catch (error) {
+        alert('Failed to cancel appointment');
+        console.error(error);
+      }
+    },
+
+    async fetchDoctors() {
+      try {
+        const response = await axios.get('/api/doctors');
+        this.doctors = response.data;
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
     },
   },
 };
@@ -450,26 +490,29 @@ export default {
   }
   
   .doctor-dropdown {
-  display: none;
   position: absolute;
-  background-color: white;
+  background: white;
   border: 1px solid #ddd;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  border-radius: 4px;
+  padding: 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 150px;
   }
   
   .doctor-dropdown ul {
   list-style: none;
+  margin: 0;
   padding: 0;
   }
   
   .doctor-dropdown li {
-  padding: 5px 0;
+  padding: 8px 16px;
   cursor: pointer;
   }
   
   .doctor-dropdown li:hover {
-  background-color: #f1f1f1;
+  background-color: #f5f5f5;
   }
   
   .cancel-btn {
@@ -483,6 +526,17 @@ export default {
   
   .cancel-btn:hover {
   background-color: #c0392b;
+  }
+
+  .action-buttons {
+    position: relative;
+  }
+
+  /* Ensure buttons have some spacing */
+  .assign-btn, .cancel-btn {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
   }
 </style>
 

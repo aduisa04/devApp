@@ -10,8 +10,12 @@ class DoctorController extends Controller
 
     public function index()
     {
-        $doctors = Doctor::all();
-        return response()->json($doctors);
+        try {
+            $doctors = Doctor::all();
+            return response()->json($doctors);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch doctors'], 500);
+        }
     }
 
     public function store(Request $request)

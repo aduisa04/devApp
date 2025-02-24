@@ -11,14 +11,19 @@ class Appointment extends Model
 
     // Specify which fields are mass-assignable
     protected $fillable = [
+        'doctor_id',
+        'status',
         'name',
         'phone',
-        'pet',
-        'breed',
-        'treatment',
-        'petName',
-        'time',
         'date',
+        'time',
+        'treatment',
+        'clinic_id'
     ];
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
 }
 
