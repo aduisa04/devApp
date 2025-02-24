@@ -6612,37 +6612,24 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 //
 //
 //
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       appointments: [],
-      // All appointments
       displayedAppointments: [],
-      // Filtered appointments to display
-      searchQuery: '',
-      doctors: []
+      doctors: [],
+      searchQuery: ''
     };
   },
   mounted: function mounted() {
-    var _this = this;
-    // Fetch appointments from the API when the component is mounted
     this.fetchAppointments();
-
-    // Fetch doctors from the API
-    axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/doctors').then(function (response) {
-      _this.doctors = response.data; // Set the doctors data
-    })["catch"](function (error) {
-      console.error('There was an error fetching doctors:', error);
-    });
+    this.fetchDoctors();
   },
   methods: {
-    // Fetch all appointments from the API
     fetchAppointments: function fetchAppointments() {
-      var _this2 = this;
+      var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -6653,8 +6640,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/appointments');
             case 3:
               response = _context.sent;
-              _this2.appointments = response.data;
-              _this2.displayedAppointments = response.data; // Initially show all appointments
+              _this.appointments = response.data;
+              _this.displayedAppointments = response.data;
               _context.next = 11;
               break;
             case 8:
@@ -6668,7 +6655,144 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, _callee, null, [[0, 8]]);
       }))();
     },
-    // Filter appointments based on search query
+    fetchDoctors: function fetchDoctors() {
+      var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/doctors');
+            case 3:
+              response = _context2.sent;
+              _this2.doctors = response.data;
+              console.log('Doctors fetched:', _this2.doctors); // Debug log
+              _context2.next = 11;
+              break;
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](0);
+              console.error('Error fetching doctors:', _context2.t0);
+            case 11:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2, null, [[0, 8]]);
+      }))();
+    },
+    toggleDoctorDropdown: function toggleDoctorDropdown(appointment) {
+      var _this3 = this;
+      this.appointments.forEach(function (app) {
+        if (app !== appointment) {
+          _this3.$set(app, 'showDropdown', false);
+        }
+      });
+      this.$set(appointment, 'showDropdown', !appointment.showDropdown);
+    },
+    assignDoctor: function assignDoctor(appointment, doctor) {
+      var _this4 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response, _error$response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              console.log('Assigning doctor:', {
+                appointmentId: appointment.id,
+                doctorId: doctor.id
+              }); // Debug log
+              _context3.next = 4;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/appointments/".concat(appointment.id), {
+                doctor_id: doctor.id
+              });
+            case 4:
+              response = _context3.sent;
+              console.log('Assignment response:', response.data); // Debug log
+              if (!response.data.success) {
+                _context3.next = 15;
+                break;
+              }
+              // Update the appointment locally
+              appointment.doctor_id = doctor.id;
+              appointment.status = 'Assigned';
+              appointment.showDropdown = false;
+
+              // Show success message
+              alert('Doctor assigned successfully!');
+
+              // Refresh the appointments list
+              _context3.next = 13;
+              return _this4.fetchAppointments();
+            case 13:
+              _context3.next = 16;
+              break;
+            case 15:
+              throw new Error(response.data.message);
+            case 16:
+              _context3.next = 22;
+              break;
+            case 18:
+              _context3.prev = 18;
+              _context3.t0 = _context3["catch"](0);
+              console.error('Assignment error:', _context3.t0);
+              alert('Failed to assign doctor: ' + (((_error$response = _context3.t0.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || _context3.t0.message));
+            case 22:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3, null, [[0, 18]]);
+      }))();
+    },
+    cancelAppointment: function cancelAppointment(appointment) {
+      var _this5 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response, _error$response2;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              if (confirm('Are you sure you want to cancel this appointment?')) {
+                _context4.next = 2;
+                break;
+              }
+              return _context4.abrupt("return");
+            case 2:
+              _context4.prev = 2;
+              _context4.next = 5;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/appointments/".concat(appointment.id), {
+                status: 'Cancelled'
+              });
+            case 5:
+              response = _context4.sent;
+              if (!response.data.success) {
+                _context4.next = 13;
+                break;
+              }
+              appointment.status = 'Cancelled';
+              alert('Appointment cancelled successfully!');
+              _context4.next = 11;
+              return _this5.fetchAppointments();
+            case 11:
+              _context4.next = 14;
+              break;
+            case 13:
+              throw new Error(response.data.message);
+            case 14:
+              _context4.next = 20;
+              break;
+            case 16:
+              _context4.prev = 16;
+              _context4.t0 = _context4["catch"](2);
+              console.error('Cancel error:', _context4.t0);
+              alert('Failed to cancel appointment: ' + (((_error$response2 = _context4.t0.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || _context4.t0.message));
+            case 20:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4, null, [[2, 16]]);
+      }))();
+    },
     filterAppointments: function filterAppointments() {
       if (!this.searchQuery) {
         this.displayedAppointments = this.appointments;
@@ -6679,108 +6803,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         var _appointment$name, _appointment$phone, _appointment$treatmen, _appointment$status, _appointment$date;
         return ((_appointment$name = appointment.name) === null || _appointment$name === void 0 ? void 0 : _appointment$name.toLowerCase().includes(query)) || ((_appointment$phone = appointment.phone) === null || _appointment$phone === void 0 ? void 0 : _appointment$phone.toLowerCase().includes(query)) || ((_appointment$treatmen = appointment.treatment) === null || _appointment$treatmen === void 0 ? void 0 : _appointment$treatmen.toLowerCase().includes(query)) || ((_appointment$status = appointment.status) === null || _appointment$status === void 0 ? void 0 : _appointment$status.toLowerCase().includes(query)) || ((_appointment$date = appointment.date) === null || _appointment$date === void 0 ? void 0 : _appointment$date.toLowerCase().includes(query));
       });
-    },
-    toggleDoctorDropdown: function toggleDoctorDropdown(appointment) {
-      var _this3 = this;
-      // Close all other dropdowns
-      this.appointments.forEach(function (app) {
-        if (app !== appointment) {
-          _this3.$set(app, 'showDropdown', false);
-        }
-      });
-      // Toggle the clicked appointment's dropdown
-      this.$set(appointment, 'showDropdown', !appointment.showDropdown);
-    },
-    assignDoctor: function assignDoctor(appointment, doctor) {
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
-              _context2.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/appointments/".concat(appointment.id), {
-                doctor_id: doctor.id,
-                status: 'Assigned'
-              });
-            case 3:
-              // Update the appointment locally
-              appointment.doctor_id = doctor.id;
-              appointment.status = 'Assigned';
-              appointment.showDropdown = false;
-              alert('Doctor assigned successfully!');
-              _context2.next = 13;
-              break;
-            case 9:
-              _context2.prev = 9;
-              _context2.t0 = _context2["catch"](0);
-              alert('Failed to assign doctor');
-              console.error(_context2.t0);
-            case 13:
-            case "end":
-              return _context2.stop();
-          }
-        }, _callee2, null, [[0, 9]]);
-      }))();
-    },
-    cancelAppointment: function cancelAppointment(appointment) {
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
-            case 0:
-              if (confirm('Are you sure you want to cancel this appointment?')) {
-                _context3.next = 2;
-                break;
-              }
-              return _context3.abrupt("return");
-            case 2:
-              _context3.prev = 2;
-              _context3.next = 5;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().put("/api/appointments/".concat(appointment.id), {
-                status: 'Cancelled'
-              });
-            case 5:
-              // Update the appointment locally
-              appointment.status = 'Cancelled';
-              alert('Appointment cancelled successfully!');
-              _context3.next = 13;
-              break;
-            case 9:
-              _context3.prev = 9;
-              _context3.t0 = _context3["catch"](2);
-              alert('Failed to cancel appointment');
-              console.error(_context3.t0);
-            case 13:
-            case "end":
-              return _context3.stop();
-          }
-        }, _callee3, null, [[2, 9]]);
-      }))();
-    },
-    fetchDoctors: function fetchDoctors() {
-      var _this4 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var response;
-        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-          while (1) switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.prev = 0;
-              _context4.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/doctors');
-            case 3:
-              response = _context4.sent;
-              _this4.doctors = response.data;
-              _context4.next = 10;
-              break;
-            case 7:
-              _context4.prev = 7;
-              _context4.t0 = _context4["catch"](0);
-              console.error('Error fetching doctors:', _context4.t0);
-            case 10:
-            case "end":
-              return _context4.stop();
-          }
-        }, _callee4, null, [[0, 7]]);
-      }))();
     }
   }
 });
@@ -14121,7 +14143,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Sidebar Menu */\nbody[data-v-897dcc26] {\nfont-family: 'Arial', sans-serif;\nmargin: 0;\ndisplay: flex;\nbackground-color: #f0f0f0;\n}\n.sidebar[data-v-897dcc26] {\nwidth: 250px;\nbackground-color: #ffddd2;\npadding: 20px;\nposition: fixed;\nheight: 100%;\ntop: 0;\nleft: 0;\nbox-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nmargin-bottom: 30px;\n}\n.sidebar-logo img[data-v-897dcc26] {\nwidth: 50px;\nheight: 50px;\nmargin-right: 10px;\n}\n.sidebar-logo h1[data-v-897dcc26] {\nfont-size: 24px;\ncolor: #333;\nfont-weight: bold;\n}\n.menu-title[data-v-897dcc26] {\nmargin-bottom: 20px;\n}\n.menu-title h2[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.dashboard-container[data-v-897dcc26] {\ndisplay: flex;\nflex-direction: column;\n}\n.dashboard-item[data-v-897dcc26] {\nmargin: 10px 0;\n}\n.dashboard-item a[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\ntext-decoration: none;\n}\n.dashboard-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\nmargin-right: 10px;\n}\n.dashboard-text[data-v-897dcc26] {\nfont-size: 16px;\ncolor: #333;\n}\n\n/* Main Content */\n.main-content[data-v-897dcc26] {\nmargin-left: 250px;\npadding: 20px;\npadding-bottom: 500px;\nbackground-color:#f0f0f0;\n}\n.header[data-v-897dcc26] {\ndisplay: flex;\njustify-content: space-between;\nalign-items: center;\nmargin-bottom: 20px;\n}\n.search-container[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nbackground-color: #f0f0f0;\nmargin-left: 20px;\n}\n.search-input[data-v-897dcc26] {\npadding: 10px;\nfont-size: 16px;\nborder: 1px solid #ccc;\nborder-radius: 5px;\nmargin-right: 10px;\nborder-color: #333;\n}\n.search-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\n}\n.dash-user-profile[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-info[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-avatar[data-v-897dcc26] {\nwidth: 40px;\nheight: 40px;\nborder-radius: 50%;\nmargin-right: 10px;\n}\n.user-details[data-v-897dcc26] {\nmargin-right: 10px;\n}\n.user-name[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.user-role[data-v-897dcc26] {\nfont-size: 14px;\ncolor: #666;\n}\n.dropdown-icon[data-v-897dcc26] {\nwidth: 20px;\nheight: 20px;\n}\n.logout-button[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 10px 20px;\nborder-radius: 5px;\nborder: none;\n}\n.logout-button.hidden[data-v-897dcc26] {\ndisplay: none;\n}\n.container[data-v-897dcc26] {\nmargin: 50px auto;\nmax-width: 800px;\n}\n.appointment-table[data-v-897dcc26] {\nwidth: 100%;\nborder-collapse: collapse;\n}\n.appointment-table th[data-v-897dcc26], .appointment-table td[data-v-897dcc26] {\npadding: 20px;\ntext-align: left;\nborder: 1px solid #ddd;\npadding-left: 30px;\n}\n.appointment-table th[data-v-897dcc26] {\nbackground-color: #f4f4f4;\n}\n.status[data-v-897dcc26] {\ndisplay: inline-block;\nwidth: 10px;\nheight: 10px;\nborder-radius: 50%;\nbackground-color: green; /* Example status color */\n}\n.assign-btn[data-v-897dcc26] {\nbackground-color: #3498db;\ncolor: white;\npadding: 5px 10px;\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\n}\n.assign-btn[data-v-897dcc26]:hover {\nbackground-color: #2980b9;\n}\n.doctor-dropdown[data-v-897dcc26] {\nposition: absolute;\nbackground: white;\nborder: 1px solid #ddd;\nborder-radius: 4px;\npadding: 8px 0;\nbox-shadow: 0 2px 4px rgba(0,0,0,0.1);\nz-index: 1000;\nmin-width: 150px;\n}\n.doctor-dropdown ul[data-v-897dcc26] {\nlist-style: none;\nmargin: 0;\npadding: 0;\n}\n.doctor-dropdown li[data-v-897dcc26] {\npadding: 8px 16px;\ncursor: pointer;\n}\n.doctor-dropdown li[data-v-897dcc26]:hover {\nbackground-color: #f5f5f5;\n}\n.cancel-btn[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 5px 10px;\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\n}\n.cancel-btn[data-v-897dcc26]:hover {\nbackground-color: #c0392b;\n}\n.action-buttons[data-v-897dcc26] {\n  position: relative;\n}\n\n/* Ensure buttons have some spacing */\n.assign-btn[data-v-897dcc26], .cancel-btn[data-v-897dcc26] {\n  margin: 0 5px;\n  padding: 5px 10px;\n  cursor: pointer;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Sidebar Menu */\nbody[data-v-897dcc26] {\nfont-family: 'Arial', sans-serif;\nmargin: 0;\ndisplay: flex;\nbackground-color: #f0f0f0;\n}\n.sidebar[data-v-897dcc26] {\nwidth: 250px;\nbackground-color: #ffddd2;\npadding: 20px;\nposition: fixed;\nheight: 100%;\ntop: 0;\nleft: 0;\nbox-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nmargin-bottom: 30px;\n}\n.sidebar-logo img[data-v-897dcc26] {\nwidth: 50px;\nheight: 50px;\nmargin-right: 10px;\n}\n.sidebar-logo h1[data-v-897dcc26] {\nfont-size: 24px;\ncolor: #333;\nfont-weight: bold;\n}\n.menu-title[data-v-897dcc26] {\nmargin-bottom: 20px;\n}\n.menu-title h2[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.dashboard-container[data-v-897dcc26] {\ndisplay: flex;\nflex-direction: column;\n}\n.dashboard-item[data-v-897dcc26] {\nmargin: 10px 0;\n}\n.dashboard-item a[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\ntext-decoration: none;\n}\n.dashboard-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\nmargin-right: 10px;\n}\n.dashboard-text[data-v-897dcc26] {\nfont-size: 16px;\ncolor: #333;\n}\n\n/* Main Content */\n.main-content[data-v-897dcc26] {\nmargin-left: 250px;\npadding: 20px;\npadding-bottom: 500px;\nbackground-color:#f0f0f0;\n}\n.header[data-v-897dcc26] {\ndisplay: flex;\njustify-content: space-between;\nalign-items: center;\nmargin-bottom: 20px;\n}\n.search-container[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nbackground-color: #f0f0f0;\nmargin-left: 20px;\n}\n.search-input[data-v-897dcc26] {\npadding: 10px;\nfont-size: 16px;\nborder: 1px solid #ccc;\nborder-radius: 5px;\nmargin-right: 10px;\nborder-color: #333;\n}\n.search-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\n}\n.dash-user-profile[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-info[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-avatar[data-v-897dcc26] {\nwidth: 40px;\nheight: 40px;\nborder-radius: 50%;\nmargin-right: 10px;\n}\n.user-details[data-v-897dcc26] {\nmargin-right: 10px;\n}\n.user-name[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.user-role[data-v-897dcc26] {\nfont-size: 14px;\ncolor: #666;\n}\n.dropdown-icon[data-v-897dcc26] {\nwidth: 20px;\nheight: 20px;\n}\n.logout-button[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 10px 20px;\nborder-radius: 5px;\nborder: none;\n}\n.logout-button.hidden[data-v-897dcc26] {\ndisplay: none;\n}\n.container[data-v-897dcc26] {\nmargin: 50px auto;\nmax-width: 800px;\n}\n.appointment-table[data-v-897dcc26] {\nwidth: 100%;\nborder-collapse: collapse;\n}\n.appointment-table th[data-v-897dcc26], .appointment-table td[data-v-897dcc26] {\npadding: 20px;\ntext-align: left;\nborder: 1px solid #ddd;\npadding-left: 30px;\n}\n.appointment-table th[data-v-897dcc26] {\nbackground-color: #f4f4f4;\n}\n.status[data-v-897dcc26] {\ndisplay: inline-block;\nwidth: 10px;\nheight: 10px;\nborder-radius: 50%;\nbackground-color: green; /* Example status color */\n}\n.assign-btn[data-v-897dcc26] {\nbackground-color: #3498db;\ncolor: white;\npadding: 5px 10px;\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\n}\n.assign-btn[data-v-897dcc26]:hover {\nbackground-color: #2980b9;\n}\n.doctor-dropdown[data-v-897dcc26] {\nposition: absolute;\nbackground-color: white;\nborder: 1px solid #ddd;\nbox-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);\npadding: 10px;\nz-index: 1000;\n}\n.doctor-dropdown ul[data-v-897dcc26] {\nlist-style: none;\npadding: 0;\nmargin: 0;\n}\n.doctor-dropdown li[data-v-897dcc26] {\npadding: 8px 12px;\ncursor: pointer;\n}\n.doctor-dropdown li[data-v-897dcc26]:hover {\nbackground-color: #f1f1f1;\n}\n.cancel-btn[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 5px 10px;\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\n}\n.cancel-btn[data-v-897dcc26]:hover {\nbackground-color: #c0392b;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41205,69 +41227,60 @@ var render = function () {
                 _c("td", [_vm._v(_vm._s(appointment.clinic_id))]),
                 _vm._v(" "),
                 _c("td", [
-                  _c("div", { staticClass: "action-buttons" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "assign-btn",
-                        on: {
-                          click: function ($event) {
-                            return _vm.toggleDoctorDropdown(appointment)
-                          },
+                  _c(
+                    "button",
+                    {
+                      staticClass: "assign-btn",
+                      on: {
+                        click: function ($event) {
+                          return _vm.toggleDoctorDropdown(appointment)
                         },
                       },
-                      [
-                        _vm._v(
-                          "\n                    Assign\n                  "
-                        ),
-                      ]
-                    ),
-                    _vm._v(" "),
-                    appointment.showDropdown
-                      ? _c("div", { staticClass: "doctor-dropdown" }, [
-                          _c(
-                            "ul",
-                            _vm._l(_vm.doctors, function (doctor) {
-                              return _c(
-                                "li",
-                                {
-                                  key: doctor.id,
-                                  on: {
-                                    click: function ($event) {
-                                      return _vm.assignDoctor(
-                                        appointment,
-                                        doctor
-                                      )
-                                    },
+                    },
+                    [_vm._v("\n                  Assign\n                ")]
+                  ),
+                  _vm._v(" "),
+                  appointment.showDropdown
+                    ? _c("div", { staticClass: "doctor-dropdown" }, [
+                        _c(
+                          "ul",
+                          _vm._l(_vm.doctors, function (doctor) {
+                            return _c(
+                              "li",
+                              {
+                                key: doctor.id,
+                                on: {
+                                  click: function ($event) {
+                                    return _vm.assignDoctor(appointment, doctor)
                                   },
                                 },
-                                [
-                                  _vm._v(
-                                    "\n                        " +
-                                      _vm._s(doctor.name) +
-                                      "\n                      "
-                                  ),
-                                ]
-                              )
-                            }),
-                            0
-                          ),
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "cancel-btn",
-                        on: {
-                          click: function ($event) {
-                            return _vm.cancelAppointment(appointment)
-                          },
+                              },
+                              [
+                                _vm._v(
+                                  "\n                      " +
+                                    _vm._s(doctor.name) +
+                                    "\n                    "
+                                ),
+                              ]
+                            )
+                          }),
+                          0
+                        ),
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "cancel-btn",
+                      on: {
+                        click: function ($event) {
+                          return _vm.cancelAppointment(appointment)
                         },
                       },
-                      [_vm._v("Cancel")]
-                    ),
-                  ]),
+                    },
+                    [_vm._v("Cancel")]
+                  ),
                 ]),
               ])
             }),

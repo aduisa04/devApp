@@ -149,19 +149,17 @@
               <td>{{ appointment.clinic_id }}</td>
               
               <td>
-                <div class="action-buttons">
-                  <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
-                    Assign
-                  </button>
-                  <div v-if="appointment.showDropdown" class="doctor-dropdown">
-                    <ul>
-                      <li v-for="doctor in doctors" :key="doctor.id" @click="assignDoctor(appointment, doctor)">
-                        {{ doctor.name }}
-                      </li>
-                    </ul>
-                  </div>
-                  <button class="cancel-btn" @click="cancelAppointment(appointment)">Cancel</button>
+                <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
+                  Assign
+                </button>
+                <div v-if="appointment.showDropdown" class="doctor-dropdown">
+                  <ul>
+                    <li v-for="doctor in doctors" :key="doctor.id" @click="assignDoctor(appointment, doctor)">
+                      {{ doctor.name }}
+                    </li>
+                  </ul>
                 </div>
+                <button class="cancel-btn" @click="cancelAppointment(appointment)">Cancel</button>
               </td>
             </tr>
           </tbody>
@@ -177,38 +175,99 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      appointments: [], // All appointments
-      displayedAppointments: [], // Filtered appointments to display
-      searchQuery: '',
+      appointments: [],
+      displayedAppointments: [],
       doctors: [],
+      searchQuery: '',
     };
   },
   mounted() {
-    // Fetch appointments from the API when the component is mounted
     this.fetchAppointments();
-
-    // Fetch doctors from the API
-    axios.get('/api/doctors')
-      .then(response => {
-        this.doctors = response.data; // Set the doctors data
-      })
-      .catch(error => {
-        console.error('There was an error fetching doctors:', error);
-      });
+    this.fetchDoctors();
   },
   methods: {
-    // Fetch all appointments from the API
     async fetchAppointments() {
       try {
         const response = await axios.get('/api/appointments');
         this.appointments = response.data;
-        this.displayedAppointments = response.data; // Initially show all appointments
+        this.displayedAppointments = response.data;
       } catch (error) {
         console.error('Error fetching appointments:', error);
       }
     },
 
-    // Filter appointments based on search query
+    async fetchDoctors() {
+      try {
+        const response = await axios.get('/api/doctors');
+        this.doctors = response.data;
+        console.log('Doctors fetched:', this.doctors); // Debug log
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    },
+
+    toggleDoctorDropdown(appointment) {
+      this.appointments.forEach(app => {
+        if (app !== appointment) {
+          this.$set(app, 'showDropdown', false);
+        }
+      });
+      this.$set(appointment, 'showDropdown', !appointment.showDropdown);
+    },
+
+    async assignDoctor(appointment, doctor) {
+      try {
+        console.log('Assigning doctor:', { appointmentId: appointment.id, doctorId: doctor.id }); // Debug log
+        
+        const response = await axios.put(`/api/appointments/${appointment.id}`, {
+          doctor_id: doctor.id
+        });
+
+        console.log('Assignment response:', response.data); // Debug log
+
+        if (response.data.success) {
+          // Update the appointment locally
+          appointment.doctor_id = doctor.id;
+          appointment.status = 'Assigned';
+          appointment.showDropdown = false;
+
+          // Show success message
+          alert('Doctor assigned successfully!');
+          
+          // Refresh the appointments list
+          await this.fetchAppointments();
+        } else {
+          throw new Error(response.data.message);
+        }
+      } catch (error) {
+        console.error('Assignment error:', error);
+        alert('Failed to assign doctor: ' + (error.response?.data?.message || error.message));
+      }
+    },
+
+    async cancelAppointment(appointment) {
+      if (!confirm('Are you sure you want to cancel this appointment?')) {
+        return;
+      }
+
+      try {
+        const response = await axios.put(`/api/appointments/${appointment.id}`, {
+          status: 'Cancelled'
+        });
+
+        if (response.data.success) {
+          appointment.status = 'Cancelled';
+          alert('Appointment cancelled successfully!');
+          await this.fetchAppointments();
+        } else {
+          throw new Error(response.data.message);
+        }
+      } catch (error) {
+        console.error('Cancel error:', error);
+        alert('Failed to cancel appointment: ' + (error.response?.data?.message || error.message));
+      }
+    },
+
     filterAppointments() {
       if (!this.searchQuery) {
         this.displayedAppointments = this.appointments;
@@ -225,64 +284,6 @@ export default {
           appointment.date?.toLowerCase().includes(query)
         );
       });
-    },
-
-    toggleDoctorDropdown(appointment) {
-      // Close all other dropdowns
-      this.appointments.forEach(app => {
-        if (app !== appointment) {
-          this.$set(app, 'showDropdown', false);
-        }
-      });
-      // Toggle the clicked appointment's dropdown
-      this.$set(appointment, 'showDropdown', !appointment.showDropdown);
-    },
-
-    async assignDoctor(appointment, doctor) {
-      try {
-        await axios.put(`/api/appointments/${appointment.id}`, {
-          doctor_id: doctor.id,
-          status: 'Assigned'
-        });
-
-        // Update the appointment locally
-        appointment.doctor_id = doctor.id;
-        appointment.status = 'Assigned';
-        appointment.showDropdown = false;
-
-        alert('Doctor assigned successfully!');
-      } catch (error) {
-        alert('Failed to assign doctor');
-        console.error(error);
-      }
-    },
-
-    async cancelAppointment(appointment) {
-      if (!confirm('Are you sure you want to cancel this appointment?')) {
-        return;
-      }
-
-      try {
-        await axios.put(`/api/appointments/${appointment.id}`, {
-          status: 'Cancelled'
-        });
-
-        // Update the appointment locally
-        appointment.status = 'Cancelled';
-        alert('Appointment cancelled successfully!');
-      } catch (error) {
-        alert('Failed to cancel appointment');
-        console.error(error);
-      }
-    },
-
-    async fetchDoctors() {
-      try {
-        const response = await axios.get('/api/doctors');
-        this.doctors = response.data;
-      } catch (error) {
-        console.error('Error fetching doctors:', error);
-      }
     },
   },
 };
@@ -491,28 +492,26 @@ export default {
   
   .doctor-dropdown {
   position: absolute;
-  background: white;
+  background-color: white;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 8px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
   z-index: 1000;
-  min-width: 150px;
   }
   
   .doctor-dropdown ul {
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
   }
   
   .doctor-dropdown li {
-  padding: 8px 16px;
+  padding: 8px 12px;
   cursor: pointer;
   }
   
   .doctor-dropdown li:hover {
-  background-color: #f5f5f5;
+  background-color: #f1f1f1;
   }
   
   .cancel-btn {
@@ -526,17 +525,6 @@ export default {
   
   .cancel-btn:hover {
   background-color: #c0392b;
-  }
-
-  .action-buttons {
-    position: relative;
-  }
-
-  /* Ensure buttons have some spacing */
-  .assign-btn, .cancel-btn {
-    margin: 0 5px;
-    padding: 5px 10px;
-    cursor: pointer;
   }
 </style>
 
