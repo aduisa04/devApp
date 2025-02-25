@@ -135,7 +135,6 @@
               <th>Appointment Date & Time</th>
               <th>Treatment</th>
               <th>Status</th>
-              <th>Clinic ID</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -146,8 +145,6 @@
               <td>{{ appointment.date }} {{ appointment.time }}</td>
               <td>{{ appointment.treatment }}</td>
               <td><span class="status">{{ appointment.status }}</span></td>
-              <td>{{ appointment.clinic_id }}</td>
-              
               <td>
                 <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
                   Assign
@@ -217,13 +214,14 @@ export default {
 
     async assignDoctor(appointment, doctor) {
       try {
-        console.log('Assigning doctor:', { appointmentId: appointment.id, doctorId: doctor.id }); // Debug log
+        console.log('Assigning doctor:', { appointmentId: appointment.id, doctorId: doctor.id });
         
         const response = await axios.put(`/api/appointments/${appointment.id}`, {
-          doctor_id: doctor.id
+          doctor_id: doctor.id,
+          status: 'Assigned'
         });
 
-        console.log('Assignment response:', response.data); // Debug log
+        console.log('Assignment response:', response.data);
 
         if (response.data.success) {
           // Update the appointment locally

@@ -37,6 +37,8 @@ Route::get('/doctors', [DoctorController::class, 'index']);
 
 Route::delete('/doctors/{id}', [DoctorController::class, 'destroy']);
 
+Route::get('/doctors/{doctor}/appointments', [DoctorController::class, 'getAppointments']);
+
 
 
 //Patients 

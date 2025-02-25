@@ -131,6 +131,7 @@
               <th>Number</th>
               <th>Email</th>
               <th>Address</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -140,9 +141,40 @@
               <td>{{ doctor.email }}</td>
               <td>{{ doctor.address }}</td>
               <td>
-             <button @click="editDoctor(doctor.id)" class="edit-button">Edit</button>
-              <button @click="deleteDoctor(doctor.id)" class="delete-button">Delete</button>
-             </td>
+                <button @click="editDoctor(doctor.id)" class="edit-button">Edit</button>
+                <button @click="deleteDoctor(doctor.id)" class="delete-button">Delete</button>
+                <button @click="togglePatients(doctor)" class="view-patients-button">
+                  {{ doctor.showPatients ? 'Hide Patients' : 'View Patients' }}
+                </button>
+              </td>
+            </tr>
+            <tr v-for="doctor in displayedDoctors" 
+                v-if="doctor.showPatients" 
+                :key="`patients-${doctor.id}`" 
+                class="patients-row">
+              <td colspan="5">
+                <div class="assigned-patients">
+                  <h3>Assigned Patients</h3>
+                  <table class="patients-table">
+                    <thead>
+                      <tr>
+                        <th>Patient Name</th>
+                        <th>Appointment Date</th>
+                        <th>Treatment</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="appointment in doctor.appointments" :key="appointment.id">
+                        <td>{{ appointment.name }}</td>
+                        <td>{{ appointment.date }} {{ appointment.time }}</td>
+                        <td>{{ appointment.treatment }}</td>
+                        <td>{{ appointment.status }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -167,8 +199,13 @@ export default {
     async fetchDoctors() {
       try {
         const response = await axios.get('/api/doctors');
-        this.doctors = response.data;
-        this.displayedDoctors = response.data;
+        // Initialize each doctor with appointments array and showPatients flag
+        this.doctors = response.data.map(doctor => ({
+          ...doctor,
+          appointments: [],
+          showPatients: false
+        }));
+        this.displayedDoctors = this.doctors;
       } catch (error) {
         console.error('Error fetching doctors:', error);
       }
@@ -205,6 +242,30 @@ export default {
     editDoctor(id) {
       // Redirect to an edit page with the doctor's ID
       this.$router.push({ name: 'EditDoctor', params: { id } });
+    },
+
+    async togglePatients(doctor) {
+      try {
+        doctor.showPatients = !doctor.showPatients;
+        
+        if (doctor.showPatients) {
+          console.log('Fetching appointments for doctor:', doctor.id);
+          const response = await axios.get(`/api/doctors/${doctor.id}/appointments`);
+          console.log('Appointments response:', response.data);
+          
+          if (Array.isArray(response.data)) {
+            doctor.appointments = response.data;
+          } else {
+            doctor.appointments = [];
+            console.warn('No appointments found for doctor');
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+        doctor.appointments = [];
+        doctor.showPatients = false;
+        alert('Failed to fetch appointments');
+      }
     },
   },
 
@@ -589,6 +650,44 @@ body {
   background-color: #e53935;
 }
 
+.view-patients-button {
+  background-color: #2196F3;
+  color: white;
+  padding: 6px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.view-patients-button:hover {
+  background-color: #1976D2;
+}
+
+.patients-row {
+  background-color: #f8f9fa;
+}
+
+.assigned-patients {
+  padding: 15px;
+}
+
+.patients-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.patients-table th,
+.patients-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.patients-table th {
+  background-color: #e9ecef;
+}
 
 </style>
   

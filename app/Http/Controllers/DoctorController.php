@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -42,6 +43,21 @@ class DoctorController extends Controller
     $doctor->delete();
 
     return response()->json(['message' => 'Doctor deleted successfully'], 200);
+}
+
+public function getAppointments($id)
+{
+    try {
+        $doctor = Doctor::findOrFail($id);
+        $appointments = Appointment::where('doctor_id', $id)
+            ->where('status', 'Assigned')
+            ->select('id', 'name', 'date', 'time', 'treatment', 'status')
+            ->get();
+
+        return response()->json($appointments);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to fetch appointments'], 500);
+    }
 }
 
 }

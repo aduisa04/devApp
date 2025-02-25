@@ -25,5 +25,10 @@ class Appointment extends Model
         'user_id',
         'appointment_date'
     ];
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
 }
 
