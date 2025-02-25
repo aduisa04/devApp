@@ -6609,6 +6609,12 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7093,6 +7099,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
@@ -7100,6 +7112,24 @@ function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" 
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -7315,18 +7345,19 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   showPatients: false
                 });
               });
-              _this.displayedDoctors = _this.doctors;
-              _context.next = 11;
+              _this.displayedDoctors = _toConsumableArray(_this.doctors); // Create a new array reference
+              console.log('Doctors fetched:', _this.displayedDoctors); // Debug log
+              _context.next = 12;
               break;
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
               console.error('Error fetching doctors:', _context.t0);
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[0, 9]]);
       }))();
     },
     filterDoctors: function filterDoctors() {
@@ -14225,7 +14256,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Sidebar Menu */\nbody[data-v-897dcc26] {\nfont-family: 'Arial', sans-serif;\nmargin: 0;\ndisplay: flex;\nbackground-color: #f0f0f0;\n}\n.sidebar[data-v-897dcc26] {\nwidth: 250px;\nbackground-color: #ffddd2;\npadding: 20px;\nposition: fixed;\nheight: 100%;\ntop: 0;\nleft: 0;\nbox-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nmargin-bottom: 30px;\n}\n.sidebar-logo img[data-v-897dcc26] {\nwidth: 50px;\nheight: 50px;\nmargin-right: 10px;\n}\n.sidebar-logo h1[data-v-897dcc26] {\nfont-size: 24px;\ncolor: #333;\nfont-weight: bold;\n}\n.menu-title[data-v-897dcc26] {\nmargin-bottom: 20px;\n}\n.menu-title h2[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.dashboard-container[data-v-897dcc26] {\ndisplay: flex;\nflex-direction: column;\n}\n.dashboard-item[data-v-897dcc26] {\nmargin: 10px 0;\n}\n.dashboard-item a[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\ntext-decoration: none;\n}\n.dashboard-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\nmargin-right: 10px;\n}\n.dashboard-text[data-v-897dcc26] {\nfont-size: 16px;\ncolor: #333;\n}\n\n/* Main Content */\n.main-content[data-v-897dcc26] {\nmargin-left: 250px;\npadding: 20px;\npadding-bottom: 500px;\nbackground-color:#f0f0f0;\n}\n.header[data-v-897dcc26] {\ndisplay: flex;\njustify-content: space-between;\nalign-items: center;\nmargin-bottom: 20px;\n}\n.search-container[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nbackground-color: #f0f0f0;\nmargin-left: 20px;\n}\n.search-input[data-v-897dcc26] {\npadding: 10px;\nfont-size: 16px;\nborder: 1px solid #ccc;\nborder-radius: 5px;\nmargin-right: 10px;\nborder-color: #333;\n}\n.search-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\n}\n.dash-user-profile[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-info[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-avatar[data-v-897dcc26] {\nwidth: 40px;\nheight: 40px;\nborder-radius: 50%;\nmargin-right: 10px;\n}\n.user-details[data-v-897dcc26] {\nmargin-right: 10px;\n}\n.user-name[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.user-role[data-v-897dcc26] {\nfont-size: 14px;\ncolor: #666;\n}\n.dropdown-icon[data-v-897dcc26] {\nwidth: 20px;\nheight: 20px;\n}\n.logout-button[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 10px 20px;\nborder-radius: 5px;\nborder: none;\n}\n.logout-button.hidden[data-v-897dcc26] {\ndisplay: none;\n}\n.container[data-v-897dcc26] {\nmargin: 50px auto;\nmax-width: 800px;\n}\n.appointment-table[data-v-897dcc26] {\nwidth: 100%;\nborder-collapse: collapse;\n}\n.appointment-table th[data-v-897dcc26], .appointment-table td[data-v-897dcc26] {\npadding: 20px;\ntext-align: left;\nborder: 1px solid #ddd;\npadding-left: 30px;\n}\n.appointment-table th[data-v-897dcc26] {\nbackground-color: #f4f4f4;\n}\n.status[data-v-897dcc26] {\ndisplay: inline-block;\nwidth: 10px;\nheight: 10px;\nborder-radius: 50%;\nbackground-color: green; /* Example status color */\n}\n.assign-btn[data-v-897dcc26] {\nbackground-color: #3498db;\ncolor: white;\npadding: 5px 10px;\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\n}\n.assign-btn[data-v-897dcc26]:hover {\nbackground-color: #2980b9;\n}\n.doctor-dropdown[data-v-897dcc26] {\nposition: absolute;\nbackground-color: white;\nborder: 1px solid #ddd;\nbox-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);\npadding: 10px;\nz-index: 1000;\n}\n.doctor-dropdown ul[data-v-897dcc26] {\nlist-style: none;\npadding: 0;\nmargin: 0;\n}\n.doctor-dropdown li[data-v-897dcc26] {\npadding: 8px 12px;\ncursor: pointer;\n}\n.doctor-dropdown li[data-v-897dcc26]:hover {\nbackground-color: #f1f1f1;\n}\n.cancel-btn[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 5px 10px;\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\n}\n.cancel-btn[data-v-897dcc26]:hover {\nbackground-color: #c0392b;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Sidebar Menu */\nbody[data-v-897dcc26] {\nfont-family: 'Arial', sans-serif;\nmargin: 0;\ndisplay: flex;\nbackground-color: #f0f0f0;\n}\n.sidebar[data-v-897dcc26] {\nwidth: 250px;\nbackground-color: #ffddd2;\npadding: 20px;\nposition: fixed;\nheight: 100%;\ntop: 0;\nleft: 0;\nbox-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nmargin-bottom: 30px;\n}\n.sidebar-logo img[data-v-897dcc26] {\nwidth: 50px;\nheight: 50px;\nmargin-right: 10px;\n}\n.sidebar-logo h1[data-v-897dcc26] {\nfont-size: 24px;\ncolor: #333;\nfont-weight: bold;\n}\n.menu-title[data-v-897dcc26] {\nmargin-bottom: 20px;\n}\n.menu-title h2[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.dashboard-container[data-v-897dcc26] {\ndisplay: flex;\nflex-direction: column;\n}\n.dashboard-item[data-v-897dcc26] {\nmargin: 10px 0;\n}\n.dashboard-item a[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\ntext-decoration: none;\n}\n.dashboard-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\nmargin-right: 10px;\n}\n.dashboard-text[data-v-897dcc26] {\nfont-size: 16px;\ncolor: #333;\n}\n\n/* Main Content */\n.main-content[data-v-897dcc26] {\nmargin-left: 250px;\npadding: 20px;\npadding-bottom: 500px;\nbackground-color:#f0f0f0;\n}\n.header[data-v-897dcc26] {\ndisplay: flex;\njustify-content: space-between;\nalign-items: center;\nmargin-bottom: 20px;\n}\n.search-container[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\nbackground-color: #f0f0f0;\nmargin-left: 20px;\n}\n.search-input[data-v-897dcc26] {\npadding: 10px;\nfont-size: 16px;\nborder: 1px solid #ccc;\nborder-radius: 5px;\nmargin-right: 10px;\nborder-color: #333;\n}\n.search-icon[data-v-897dcc26] {\nwidth: 24px;\nheight: 24px;\n}\n.dash-user-profile[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-info[data-v-897dcc26] {\ndisplay: flex;\nalign-items: center;\n}\n.user-avatar[data-v-897dcc26] {\nwidth: 40px;\nheight: 40px;\nborder-radius: 50%;\nmargin-right: 10px;\n}\n.user-details[data-v-897dcc26] {\nmargin-right: 10px;\n}\n.user-name[data-v-897dcc26] {\nfont-size: 18px;\ncolor: #333;\n}\n.user-role[data-v-897dcc26] {\nfont-size: 14px;\ncolor: #666;\n}\n.dropdown-icon[data-v-897dcc26] {\nwidth: 20px;\nheight: 20px;\n}\n.logout-button[data-v-897dcc26] {\nbackground-color: #e74c3c;\ncolor: white;\npadding: 10px 20px;\nborder-radius: 5px;\nborder: none;\n}\n.logout-button.hidden[data-v-897dcc26] {\ndisplay: none;\n}\n.container[data-v-897dcc26] {\nmargin: 20px auto;\nwidth: 90%;\nmax-width: 1200px;\nbackground-color: white;\nborder-radius: 16px;\nbox-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\npadding: 30px;\n}\n.container h1[data-v-897dcc26] {\nfont-size: 28px;\ncolor: #2c3e50;\nfont-weight: 600;\nmargin-bottom: 25px;\npadding-bottom: 15px;\nborder-bottom: 2px solid #f0f0f0;\n}\n.appointment-table[data-v-897dcc26] {\nwidth: 100%;\nborder-collapse: separate;\nborder-spacing: 0;\nborder-radius: 12px;\noverflow: hidden;\nbackground-color: #F8F9FF;\nbox-shadow: 0 4px 20px rgba(98, 77, 227, 0.1);\n}\n.appointment-table th[data-v-897dcc26] {\nbackground-color: #624DE3;\ncolor: white;\nfont-weight: 600;\npadding: 20px 24px;\ntext-transform: uppercase;\nfont-size: 14px;\nletter-spacing: 0.5px;\nborder: none;\ntext-align: left;\n}\n.appointment-table td[data-v-897dcc26] {\npadding: 20px 24px;\nfont-size: 15px;\ncolor: #2D3748;\nbackground-color: #E8EAFF;\nborder-bottom: 2px solid #FFFFFF;\ntransition: all 0.2s ease;\nposition: relative;\n}\n.appointment-table tr:nth-child(even) td[data-v-897dcc26] {\nbackground-color: #F3F4FF;\n}\n.appointment-table tr:hover td[data-v-897dcc26] {\nbackground-color: #FFFFFF !important;\ntransform: translateY(-1px);\nbox-shadow: 0 2px 4px rgba(98, 77, 227, 0.1);\n}\n.status-badge[data-v-897dcc26] {\ndisplay: inline-flex;\nalign-items: center;\njustify-content: center;\npadding: 8px 16px;\nborder-radius: 20px;\nfont-size: 14px;\nfont-weight: 500;\ntext-align: center;\nmin-width: 100px;\nbox-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);\n}\n.assigned[data-v-897dcc26] {\nbackground-color: #E6F7E9;\ncolor: #34C759;\nborder: 1px solid rgba(52, 199, 89, 0.1);\n}\n.pending[data-v-897dcc26] {\nbackground-color: #FFF4DE;\ncolor: #FFA043;\nborder: 1px solid rgba(255, 160, 67, 0.1);\n}\n.cancelled[data-v-897dcc26] {\nbackground-color: #FFE6E6;\ncolor: #FF3B30;\nborder: 1px solid rgba(255, 59, 48, 0.1);\n}\n.completed[data-v-897dcc26] {\nbackground-color: #E6EDFE;\ncolor: #624DE3;\nborder: 1px solid rgba(98, 77, 227, 0.1);\n}\n.assign-btn[data-v-897dcc26], .cancel-btn[data-v-897dcc26] {\ndisplay: inline-flex;\nalign-items: center;\npadding: 8px 16px;\nborder: none;\nborder-radius: 8px;\nfont-size: 14px;\nfont-weight: 500;\ncursor: pointer;\ntransition: all 0.2s ease;\ngap: 8px;\nbox-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);\nmargin-right: 8px;\n}\n.assign-btn[data-v-897dcc26] {\nposition: relative;\nbackground-color: #624DE3;\ncolor: white;\nz-index: 999;\n}\n.assign-btn[data-v-897dcc26]:hover {\nbackground-color: #5A45DD;\ntransform: translateY(-1px);\nbox-shadow: 0 4px 6px rgba(98, 77, 227, 0.2);\n}\n.cancel-btn[data-v-897dcc26] {\nbackground-color: #FF3B30;\ncolor: white;\n}\n.cancel-btn[data-v-897dcc26]:hover {\nbackground-color: #E6352B;\ntransform: translateY(-1px);\nbox-shadow: 0 4px 6px rgba(255, 59, 48, 0.2);\n}\n.doctor-dropdown[data-v-897dcc26] {\nposition: absolute;\ntop: calc(100% + 5px); /* Position below the button with a small gap */\nright: 0; /* Align to the right instead of left */\nbackground-color: #FFFFFF;\nborder-radius: 12px;\nborder: 1px solid rgba(98, 77, 227, 0.15);\nbox-shadow: 0 8px 24px rgba(98, 77, 227, 0.15);\npadding: 8px 0;\nz-index: 1000;\nmin-width: 220px;\nanimation: dropdownFade-data-v-897dcc26 0.2s ease;\n/* Ensure the dropdown doesn't go off-screen on the right */\nmax-width: 300px;\n/* Add max-height to prevent very long dropdowns */\nmax-height: 400px;\noverflow-y: auto;\n}\n@keyframes dropdownFade-data-v-897dcc26 {\nfrom {\n  opacity: 0;\n  transform: translateY(-10px);\n}\nto {\n  opacity: 1;\n  transform: translateY(0);\n}\n}\n.doctor-dropdown[data-v-897dcc26]::before {\ncontent: '';\nposition: absolute;\ntop: -6px;\nright: 20px; /* Align arrow to the right */\nleft: auto; /* Remove left positioning */\nwidth: 12px;\nheight: 12px;\nbackground-color: #FFFFFF;\nborder-left: 1px solid rgba(98, 77, 227, 0.15);\nborder-top: 1px solid rgba(98, 77, 227, 0.15);\ntransform: rotate(45deg);\n}\n.doctor-dropdown ul[data-v-897dcc26] {\nlist-style: none;\npadding: 0;\nmargin: 0;\nmax-height: 300px;\noverflow-y: auto;\n}\n.doctor-dropdown ul[data-v-897dcc26]::-webkit-scrollbar {\nwidth: 8px;\n}\n.doctor-dropdown ul[data-v-897dcc26]::-webkit-scrollbar-track {\nbackground: #F0F3FF;\nborder-radius: 4px;\n}\n.doctor-dropdown ul[data-v-897dcc26]::-webkit-scrollbar-thumb {\nbackground: #624DE3;\nborder-radius: 4px;\n}\n.doctor-dropdown li[data-v-897dcc26] {\npadding: 12px 16px;\ncursor: pointer;\ncolor: #2D3748;\ntransition: all 0.2s ease;\nfont-size: 14px;\ndisplay: flex;\nalign-items: center;\nposition: relative;\n}\n.doctor-dropdown li[data-v-897dcc26]:not(:last-child) {\nborder-bottom: 1px solid rgba(98, 77, 227, 0.08);\n}\n.doctor-dropdown li[data-v-897dcc26]:hover {\nbackground-color: #F0F3FF;\ncolor: #624DE3;\npadding-left: 20px;\n}\n.doctor-dropdown li[data-v-897dcc26]::before {\ncontent: '';\nposition: absolute;\nleft: 0;\nwidth: 3px;\nheight: 0;\nbackground-color: #624DE3;\ntransition: height 0.2s ease;\n}\n.doctor-dropdown li[data-v-897dcc26]:hover::before {\nheight: 100%;\n}\n\n/* Add position relative to td containing the dropdown */\n.appointment-table td[data-v-897dcc26] {\nposition: relative;\n}\n\n/* Ensure the dropdown appears above other elements */\n.appointment-table tr[data-v-897dcc26]:hover {\nz-index: 10;\nposition: relative;\n}\n\n/* Adjust the action buttons container */\n.action-buttons[data-v-897dcc26] {\n  display: flex;\n  gap: 8px;\n  position: relative;\n}\n\n/* Updated dropdown positioning */\n.doctor-dropdown[data-v-897dcc26] {\n  position: absolute;\n  top: calc(100% + 5px); /* Position below the button with a small gap */\n  right: 0; /* Align to the right instead of left */\n  background-color: #FFFFFF;\n  border-radius: 12px;\n  border: 1px solid rgba(98, 77, 227, 0.15);\n  box-shadow: 0 8px 24px rgba(98, 77, 227, 0.15);\n  padding: 8px 0;\n  z-index: 1000;\n  min-width: 220px;\n  animation: dropdownFade-data-v-897dcc26 0.2s ease;\n  /* Ensure the dropdown doesn't go off-screen on the right */\n  max-width: 300px;\n  /* Add max-height to prevent very long dropdowns */\n  max-height: 400px;\n  overflow-y: auto;\n}\n\n/* Adjust the arrow position for right alignment */\n.doctor-dropdown[data-v-897dcc26]::before {\n  content: '';\n  position: absolute;\n  top: -6px;\n  right: 20px; /* Align arrow to the right */\n  left: auto; /* Remove left positioning */\n  width: 12px;\n  height: 12px;\n  background-color: #FFFFFF;\n  border-left: 1px solid rgba(98, 77, 227, 0.15);\n  border-top: 1px solid rgba(98, 77, 227, 0.15);\n  transform: rotate(45deg);\n}\n\n/* Ensure the dropdown list is scrollable if too long */\n.doctor-dropdown ul[data-v-897dcc26] {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n  max-height: 300px;\n  overflow-y: auto;\n}\n\n/* Add some spacing in the table cell for the dropdown */\n.appointment-table td[data-v-897dcc26]:last-child {\n  min-width: 200px; /* Ensure enough space for buttons */\n  padding-right: 30px; /* Add some extra padding on the right */\n}\n\n/* Make sure the buttons stay visible */\n.assign-btn[data-v-897dcc26], .cancel-btn[data-v-897dcc26] {\n  position: relative;\n  z-index: 998; /* Slightly lower than dropdown */\n}\n\n/* When dropdown is open, ensure it's above other elements */\n.doctor-dropdown[data-v-897dcc26] {\n  z-index: 1000;\n}\n\n/* Update table row z-index behavior */\n.appointment-table tr[data-v-897dcc26] {\n  position: relative;\n  z-index: 1;\n}\n\n/* When row has active dropdown, bring it to front */\n.appointment-table tr[data-v-897dcc26]:has(.doctor-dropdown) {\n  z-index: 1000;\n}\n\n/* Action buttons container */\n.action-buttons[data-v-897dcc26] {\n  display: flex;\n  gap: 8px;\n  position: relative;\n  z-index: 2; /* Base z-index for the container */\n}\n\n/* Update dropdown to ensure it's always on top */\n.doctor-dropdown[data-v-897dcc26] {\n  position: absolute;\n  top: 100%;\n  left: 0;\n  background-color: #FFFFFF;\n  border-radius: 8px;\n  border: 1px solid rgba(98, 77, 227, 0.15);\n  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);\n  padding: 8px 0;\n  z-index: 9999; /* Much higher z-index to ensure it's above everything */\n  min-width: 200px;\n  max-width: 300px;\n  max-height: 300px;\n  overflow-y: auto;\n}\n\n/* Ensure the table cell containing the dropdown has the correct stacking context */\n.appointment-table td[data-v-897dcc26]:last-child {\n  position: relative;\n  z-index: 2;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -14273,7 +14304,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* Sidebar Menu */\nbody[data-v-7bb6ebfc] {\r\n    font-family: 'Arial', sans-serif;\r\n    margin: 0;\r\n    display: flex;\r\n    background-color: #f0f0f0;\n}\n.sidebar[data-v-7bb6ebfc] {\r\n    width: 250px;\r\n    background-color: #ffddd2;\r\n    padding: 20px;\r\n    position: fixed;\r\n    height: 100%;\r\n    top: 0;\r\n    left: 0;\r\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\r\n    margin-bottom: 30px;\n}\n.sidebar-logo img[data-v-7bb6ebfc] {\r\n    width: 50px;\r\n    height: 50px;\r\n    margin-right: 10px;\n}\n.sidebar-logo h1[data-v-7bb6ebfc] {\r\n    font-size: 24px;\r\n    color: #333;\r\n    font-weight: bold;\n}\n.menu-title[data-v-7bb6ebfc] {\r\n    margin-bottom: 20px;\n}\n.menu-title h2[data-v-7bb6ebfc] {\r\n    font-size: 18px;\r\n    color: #333;\n}\n.dashboard-container[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    flex-direction: column;\n}\n.dashboard-item[data-v-7bb6ebfc] {\r\n    margin: 10px 0;\n}\n.dashboard-item a[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\r\n    text-decoration: none;\n}\n.dashboard-icon[data-v-7bb6ebfc] {\r\n    width: 24px;\r\n    height: 24px;\r\n    margin-right: 10px;\n}\n.dashboard-text[data-v-7bb6ebfc] {\r\n    font-size: 16px;\r\n    color: #333;\n}\r\n\r\n/* search */\n.search-container[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\r\n    background-color: #f0f0f0;\r\n    margin-left: 20px;\n}\n.search-input[data-v-7bb6ebfc] {\r\n    padding: 10px;\r\n    font-size: 16px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 5px;\r\n    margin-right: 10px;\r\n    border-color: #333;\n}\n.search-icon[data-v-7bb6ebfc] {\r\n    width: 24px;\r\n    height: 24px;\n}\n.dash-user-profile[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\n}\n.user-info[data-v-7bb6ebfc] {\r\n  display: flex;\r\n  align-items: center;\n}\n.user-avatar[data-v-7bb6ebfc] {\r\n  width: 40px;\r\n  height: 40px;\r\n  border-radius: 50%;\r\n  margin-right: 10px;\n}\n.user-details[data-v-7bb6ebfc] {\r\n  margin-right: 10px;\n}\n.user-name[data-v-7bb6ebfc] {\r\n  font-size: 18px;\r\n  color: #333;\n}\n.user-role[data-v-7bb6ebfc] {\r\n  font-size: 14px;\r\n  color: #666;\n}\r\n\r\n\r\n\r\n\r\n/* Main Content */\n.main-content[data-v-7bb6ebfc] {\r\n    margin-left: 250px;\r\n    padding: 20px;\r\n    padding-bottom: 500px;\r\n    background-color:#f0f0f0;\n}\n.header[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    margin-bottom: 20px;\n}\n.dropdown-icon[data-v-7bb6ebfc] {\r\n    width: 20px;\r\n    height: 20px;\n}\n.logout-button[data-v-7bb6ebfc] {\r\n  background-color: #f44336;\r\n  color: white;\r\n  padding: 10px 15px;\r\n  border: none;\r\n  border-radius: 5px;\r\n  cursor: pointer;\r\n  display: none;\n}\n.logout-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #e53935;\n}\r\n\r\n/* Doctors Section */\n.action-bar[data-v-7bb6ebfc] {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  margin-bottom: 20px;\r\n  margin-left: 100px;\n}\n.add-doctor-btn a[data-v-7bb6ebfc] {\r\n  padding: 10px 20px;\r\n  background-color: #4caf50;\r\n  color: white;\r\n  border-radius: 5px;\r\n  text-decoration: none;\r\n  font-size: 14px;\n}\n.add-doctor-btn a[data-v-7bb6ebfc]:hover {\r\n  background-color: #45a049;\n}\n.section-title[data-v-7bb6ebfc] {\r\n  font-size: 24px;\r\n  color: #333;\r\n  font-weight: bold;\r\n  margin-left: 80px;\n}\n.doctors-table-doc[data-v-7bb6ebfc] {\r\n    width: 90%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n    background-color: #ffffff;\r\n    border-radius: 8px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    overflow: hidden;\r\n    margin-left: 70px;\n}\r\n\r\n/* Table Header */\n.table-header-doc[data-v-7bb6ebfc] {\r\n    background-color: #f7f7f7;\r\n    padding: 10px 0;\r\n    font-weight: 600;\r\n    color: #333;\n}\n.header-row-doc[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    padding: 10px;\r\n    border-bottom: 2px solid #e5e5e5;\n}\r\n\r\n/* Header Cells */\n.header-cell-doc[data-v-7bb6ebfc] {\r\n    flex: 1;\r\n    padding: 10px 10px;\r\n    text-align: left;\r\n    font-size: 14px;\r\n    color: #555;\n}\r\n\r\n/* Table Row */\n.table-row-doc[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    padding: 15px;\r\n    border-bottom: 1px solid #e5e5e5;\r\n    transition: background-color 0.3s;\n}\n.table-row-doc[data-v-7bb6ebfc]:hover {\r\n    background-color: #f9f9f9;\n}\r\n\r\n/* Row Content Cells */\n.name-doc[data-v-7bb6ebfc], .patients-doc[data-v-7bb6ebfc], .action-doc[data-v-7bb6ebfc] {\r\n    flex: 1;\r\n    padding: 10px 15px;\r\n    font-size: 14px;\r\n    color: #333;\n}\n.name-doc[data-v-7bb6ebfc] {\r\n    font-weight: 500;\n}\n.patients-doc[data-v-7bb6ebfc] {\r\n    text-align: center;\n}\n.action-doc[data-v-7bb6ebfc] {\r\n    text-align: center;\n}\r\n\r\n/* Delete Icon */\n.delete-icon-doc[data-v-7bb6ebfc] {\r\n    width: 20px;\r\n    height: 20px;\r\n    cursor: pointer;\r\n    transition: transform 0.2s;\n}\n.delete-icon-doc[data-v-7bb6ebfc]:hover {\r\n    transform: scale(1.1);\n}\n.btn-text[data-v-7bb6ebfc] {\r\n    background-color:#624DE3;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px;\r\n    font-size: 14px;\r\n    cursor: pointer;\r\n    text-decoration: none;\r\n    border-radius: 10px;\r\n    margin-left: 50px;\n}\n.doctor-list[data-v-7bb6ebfc] {\r\n  padding: 15px;\r\n  margin-left: 100px;\r\n  background-color: #fafafa;\r\n  border-radius: 8px;\r\n  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);\n}\n.doctor-list table[data-v-7bb6ebfc] {\r\n  width: 100%;\r\n  border-collapse: collapse;\r\n  margin-top: 20px;\n}\n.doctor-list th[data-v-7bb6ebfc],\r\n.doctor-list td[data-v-7bb6ebfc] {\r\n  padding: 12px 15px;\r\n  border: 1px solid #e0e0e0;\r\n  text-align: left;\r\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n}\n.doctor-list td[data-v-7bb6ebfc] {\r\n  padding: 12px 15px;\r\n  border: 1px solid #e0e0e0;\r\n  text-align: left;\r\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n  margin-right: 100px;\n}\n.doctor-list th[data-v-7bb6ebfc] {\r\n  background-color: #f7f7f7;\r\n  font-weight: 600;\r\n  color: #333;\r\n  padding-right: 50px;\n}\n.doctor-list tr[data-v-7bb6ebfc] {\r\n  transition: background-color 0.3s;\n}\n.doctor-list tr[data-v-7bb6ebfc]:hover {\r\n  background-color: #f1f1f1;\n}\n.doctor-list td[data-v-7bb6ebfc] {\r\n  color: #555;\n}\n.doctor-list tr:last-child td[data-v-7bb6ebfc] {\r\n  border-bottom: none;\n}\n.doctor-list th[data-v-7bb6ebfc]:first-child,\r\n.doctor-list td[data-v-7bb6ebfc]:first-child {\r\n  padding-left: 20px;\n}\n.doctor-list th[data-v-7bb6ebfc]:last-child,\r\n.doctor-list td[data-v-7bb6ebfc]:last-child {\r\n  padding-right: 50px;\n}\n.edit-button[data-v-7bb6ebfc],\r\n.delete-button[data-v-7bb6ebfc] {\r\n  padding: 6px 15px;\r\n  border: none;\r\n  border-radius: 5px;\r\n  font-size: 14px;\r\n  cursor: pointer;\r\n  transition: background-color 0.3s;\n}\n.edit-button[data-v-7bb6ebfc] {\r\n  background-color: #4caf50;\r\n  color: white;\r\n  margin-bottom: 5px;\r\n  margin-left: 50px\n}\n.edit-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #45a049;\n}\n.delete-button[data-v-7bb6ebfc] {\r\n  background-color: #f44336;\r\n  color: white;\r\n  margin-left: 40px;\n}\n.delete-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #e53935;\n}\n.view-patients-button[data-v-7bb6ebfc] {\r\n  background-color: #2196F3;\r\n  color: white;\r\n  padding: 6px 15px;\r\n  border: none;\r\n  border-radius: 5px;\r\n  cursor: pointer;\r\n  margin-left: 10px;\n}\n.view-patients-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #1976D2;\n}\n.patients-row[data-v-7bb6ebfc] {\r\n  background-color: #f8f9fa;\n}\n.assigned-patients[data-v-7bb6ebfc] {\r\n  padding: 15px;\n}\n.patients-table[data-v-7bb6ebfc] {\r\n  width: 100%;\r\n  margin-top: 10px;\r\n  border-collapse: collapse;\n}\n.patients-table th[data-v-7bb6ebfc],\r\n.patients-table td[data-v-7bb6ebfc] {\r\n  padding: 8px;\r\n  border: 1px solid #ddd;\r\n  text-align: left;\n}\n.patients-table th[data-v-7bb6ebfc] {\r\n  background-color: #e9ecef;\n}\r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* Sidebar Menu */\nbody[data-v-7bb6ebfc] {\r\n    font-family: 'Arial', sans-serif;\r\n    margin: 0;\r\n    display: flex;\r\n    background-color: #f0f0f0;\n}\n.sidebar[data-v-7bb6ebfc] {\r\n    width: 250px;\r\n    background-color: #ffddd2;\r\n    padding: 20px;\r\n    position: fixed;\r\n    height: 100%;\r\n    top: 0;\r\n    left: 0;\r\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\r\n    margin-bottom: 30px;\n}\n.sidebar-logo img[data-v-7bb6ebfc] {\r\n    width: 50px;\r\n    height: 50px;\r\n    margin-right: 10px;\n}\n.sidebar-logo h1[data-v-7bb6ebfc] {\r\n    font-size: 24px;\r\n    color: #333;\r\n    font-weight: bold;\n}\n.menu-title[data-v-7bb6ebfc] {\r\n    margin-bottom: 20px;\n}\n.menu-title h2[data-v-7bb6ebfc] {\r\n    font-size: 18px;\r\n    color: #333;\n}\n.dashboard-container[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    flex-direction: column;\n}\n.dashboard-item[data-v-7bb6ebfc] {\r\n    margin: 10px 0;\n}\n.dashboard-item a[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\r\n    text-decoration: none;\n}\n.dashboard-icon[data-v-7bb6ebfc] {\r\n    width: 24px;\r\n    height: 24px;\r\n    margin-right: 10px;\n}\n.dashboard-text[data-v-7bb6ebfc] {\r\n    font-size: 16px;\r\n    color: #333;\n}\r\n\r\n/* search */\n.search-container[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\r\n    background-color: #f0f0f0;\r\n    margin-left: 20px;\n}\n.search-input[data-v-7bb6ebfc] {\r\n    padding: 10px;\r\n    font-size: 16px;\r\n    border: 1px solid #ccc;\r\n    border-radius: 5px;\r\n    margin-right: 10px;\r\n    border-color: #333;\n}\n.search-icon[data-v-7bb6ebfc] {\r\n    width: 24px;\r\n    height: 24px;\n}\n.dash-user-profile[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    align-items: center;\n}\n.user-info[data-v-7bb6ebfc] {\r\n  display: flex;\r\n  align-items: center;\n}\n.user-avatar[data-v-7bb6ebfc] {\r\n  width: 40px;\r\n  height: 40px;\r\n  border-radius: 50%;\r\n  margin-right: 10px;\n}\n.user-details[data-v-7bb6ebfc] {\r\n  margin-right: 10px;\n}\n.user-name[data-v-7bb6ebfc] {\r\n  font-size: 18px;\r\n  color: #333;\n}\n.user-role[data-v-7bb6ebfc] {\r\n  font-size: 14px;\r\n  color: #666;\n}\r\n\r\n\r\n\r\n\r\n/* Main Content */\n.main-content[data-v-7bb6ebfc] {\r\n  margin-left: 250px;\r\n  padding: 20px;\r\n  padding-bottom: 50px;\r\n  background-color: #f0f0f0;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center; /* Center content horizontally */\n}\n.header[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    margin-bottom: 20px;\n}\n.dropdown-icon[data-v-7bb6ebfc] {\r\n    width: 20px;\r\n    height: 20px;\n}\n.logout-button[data-v-7bb6ebfc] {\r\n  background-color: #f44336;\r\n  color: white;\r\n  padding: 10px 15px;\r\n  border: none;\r\n  border-radius: 5px;\r\n  cursor: pointer;\r\n  display: none;\n}\n.logout-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #e53935;\n}\r\n\r\n/* Doctors Section */\n.action-bar[data-v-7bb6ebfc] {\r\n  width: 90%;\r\n  max-width: 1200px;\r\n  margin: 20px auto;\r\n  display: flex;\r\n  justify-content: flex-end; /* Align to the right */\r\n  padding: 0;\n}\n.add-doctor-btn[data-v-7bb6ebfc] {\r\n  margin: 0; /* Remove any existing margins */\n}\n.section-title[data-v-7bb6ebfc] {\r\n  font-size: 28px;\r\n  color: #2c3e50;\r\n  font-weight: 600;\r\n  margin-bottom: 25px;\r\n  padding-bottom: 15px;\r\n  border-bottom: 2px solid #f0f0f0;\n}\n.doctors-table-doc[data-v-7bb6ebfc] {\r\n    width: 90%;\r\n    border-collapse: collapse;\r\n    margin-top: 20px;\r\n    background-color: #ffffff;\r\n    border-radius: 8px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    overflow: hidden;\r\n    margin-left: 70px;\n}\r\n\r\n/* Table Header */\n.table-header-doc[data-v-7bb6ebfc] {\r\n    background-color: #f7f7f7;\r\n    padding: 10px 0;\r\n    font-weight: 600;\r\n    color: #333;\n}\n.header-row-doc[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    padding: 10px;\r\n    border-bottom: 2px solid #e5e5e5;\n}\r\n\r\n/* Header Cells */\n.header-cell-doc[data-v-7bb6ebfc] {\r\n    flex: 1;\r\n    padding: 10px 10px;\r\n    text-align: left;\r\n    font-size: 14px;\r\n    color: #555;\n}\r\n\r\n/* Table Row */\n.table-row-doc[data-v-7bb6ebfc] {\r\n    display: flex;\r\n    padding: 15px;\r\n    border-bottom: 1px solid #e5e5e5;\r\n    transition: background-color 0.3s;\n}\n.table-row-doc[data-v-7bb6ebfc]:hover {\r\n    background-color: #f9f9f9;\n}\r\n\r\n/* Row Content Cells */\n.name-doc[data-v-7bb6ebfc], .patients-doc[data-v-7bb6ebfc], .action-doc[data-v-7bb6ebfc] {\r\n    flex: 1;\r\n    padding: 10px 15px;\r\n    font-size: 14px;\r\n    color: #333;\n}\n.name-doc[data-v-7bb6ebfc] {\r\n    font-weight: 500;\n}\n.patients-doc[data-v-7bb6ebfc] {\r\n    text-align: center;\n}\n.action-doc[data-v-7bb6ebfc] {\r\n    text-align: center;\n}\r\n\r\n/* Delete Icon */\n.delete-icon-doc[data-v-7bb6ebfc] {\r\n    width: 20px;\r\n    height: 20px;\r\n    cursor: pointer;\r\n    transition: transform 0.2s;\n}\n.delete-icon-doc[data-v-7bb6ebfc]:hover {\r\n    transform: scale(1.1);\n}\n.btn-text[data-v-7bb6ebfc] {\r\n    background-color:#624DE3;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px;\r\n    font-size: 14px;\r\n    cursor: pointer;\r\n    text-decoration: none;\r\n    border-radius: 10px;\r\n    margin-left: 50px;\n}\n.doctor-list[data-v-7bb6ebfc] {\r\n  background-color: white;\r\n  border-radius: 16px;\r\n  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);\r\n  margin: 20px auto;\r\n  padding: 30px;\r\n  width: 90%;\r\n  max-width: 1200px;\n}\n.doctor-list table[data-v-7bb6ebfc] {\r\n  width: 100%;\r\n  border-collapse: separate;\r\n  border-spacing: 0;\r\n  border-radius: 12px;\r\n  overflow: hidden;\r\n  background-color: #F8F9FF;\r\n  box-shadow: 0 4px 20px rgba(98, 77, 227, 0.1);\n}\n.doctor-list th[data-v-7bb6ebfc] {\r\n  background-color: #624DE3;\r\n  color: white;\r\n  font-weight: 600;\r\n  padding: 20px 24px;\r\n  text-transform: uppercase;\r\n  font-size: 14px;\r\n  letter-spacing: 0.5px;\r\n  border: none;\r\n  text-align: left;\n}\n.doctor-list td[data-v-7bb6ebfc] {\r\n  padding: 20px 24px;\r\n  font-size: 15px;\r\n  color: #2D3748;\r\n  background-color: #E8EAFF;\r\n  border-bottom: 2px solid #FFFFFF;\r\n  transition: all 0.2s ease;\r\n  position: relative;\n}\n.doctor-list tr:nth-child(even) td[data-v-7bb6ebfc] {\r\n  background-color: #F3F4FF;\n}\n.doctor-list tr:hover td[data-v-7bb6ebfc] {\r\n  background-color: #FFFFFF !important;\r\n  transform: translateY(-1px);\r\n  box-shadow: 0 2px 4px rgba(98, 77, 227, 0.1);\n}\n.doctor-list td[data-v-7bb6ebfc]:first-child {\r\n  font-weight: 500;\r\n  color: #1a202c;\n}\n.edit-button[data-v-7bb6ebfc],\r\n.delete-button[data-v-7bb6ebfc] {\r\n  padding: 6px 15px;\r\n  border: none;\r\n  border-radius: 5px;\r\n  font-size: 14px;\r\n  cursor: pointer;\r\n  transition: background-color 0.3s;\n}\n.edit-button[data-v-7bb6ebfc] {\r\n  background-color: #4caf50;\r\n  color: white;\r\n  margin-bottom: 5px;\r\n  margin-left: 50px\n}\n.edit-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #45a049;\n}\n.delete-button[data-v-7bb6ebfc] {\r\n  background-color: #f44336;\r\n  color: white;\r\n  margin-left: 40px;\n}\n.delete-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #e53935;\n}\n.view-patients-button[data-v-7bb6ebfc] {\r\n  background-color: #2196F3;\r\n  color: white;\r\n  padding: 6px 15px;\r\n  border: none;\r\n  border-radius: 5px;\r\n  cursor: pointer;\r\n  margin-left: 10px;\n}\n.view-patients-button[data-v-7bb6ebfc]:hover {\r\n  background-color: #1976D2;\n}\n.patients-row[data-v-7bb6ebfc] {\r\n  background-color: #f8fafc;\n}\n.assigned-patients[data-v-7bb6ebfc] {\r\n  padding: 25px;\r\n  background-color: #FAFBFF;\r\n  border-radius: 12px;\r\n  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);\r\n  margin: 15px;\n}\n.patients-header[data-v-7bb6ebfc] {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  margin-bottom: 25px;\r\n  padding-bottom: 15px;\r\n  border-bottom: 2px solid #E6E8F7;\n}\n.patients-header h3[data-v-7bb6ebfc] {\r\n  color: #2c3e50;\r\n  font-size: 20px;\r\n  font-weight: 600;\r\n  margin: 0;\n}\n.patient-count[data-v-7bb6ebfc] {\r\n  background-color: #e0f2fe;\r\n  color: #0284c7;\r\n  padding: 6px 16px;\r\n  border-radius: 20px;\r\n  font-size: 14px;\r\n  font-weight: 500;\r\n  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);\n}\n.patients-table[data-v-7bb6ebfc] {\r\n  width: 100%;\r\n  border-collapse: separate;\r\n  border-spacing: 0;\r\n  background-color: white;\r\n  border-radius: 8px;\r\n  overflow: hidden;\r\n  margin-top: 10px;\n}\n.patients-table th[data-v-7bb6ebfc] {\r\n  background-color: #5A45DD;\r\n  color: white;\r\n  font-weight: 600;\r\n  padding: 14px 20px;\r\n  text-align: left;\r\n  font-size: 14px;\r\n  text-transform: uppercase;\r\n  letter-spacing: 0.5px;\r\n  border: none;\n}\n.patients-table tr:nth-child(even) td[data-v-7bb6ebfc] {\r\n  background-color: #F8F9FF;\n}\n.patients-table tr:nth-child(odd) td[data-v-7bb6ebfc] {\r\n  background-color: white;\n}\n.patients-table td[data-v-7bb6ebfc] {\r\n  padding: 16px 20px;\r\n  background-color: #E8EAFF;\r\n  border-bottom: 2px solid #FFFFFF;\r\n  color: #2D3748;\r\n  font-size: 14px;\n}\n.patients-table tr:hover td[data-v-7bb6ebfc] {\r\n  background-color: #FFFFFF !important;\r\n  transform: translateY(-1px);\n}\r\n\r\n/* Status badge styles */\n.status-badge[data-v-7bb6ebfc] {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  padding: 6px 16px;\r\n  border-radius: 20px;\r\n  font-size: 14px;\r\n  font-weight: 500;\r\n  text-align: center;\r\n  min-width: 100px;\r\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);\n}\n.pending[data-v-7bb6ebfc] {\r\n  background-color: #FFF4DE;\r\n  color: #FFA043;\n}\n.completed[data-v-7bb6ebfc] {\r\n  background-color: #E6F7E9;\r\n  color: #34C759;\n}\n.cancelled[data-v-7bb6ebfc] {\r\n  background-color: #FFE6E6;\r\n  color: #FF3B30;\n}\n.ongoing[data-v-7bb6ebfc] {\r\n  background-color: #E6EDFE;\r\n  color: #624DE3;\n}\r\n\r\n/* Enhanced button styling */\n.button-group[data-v-7bb6ebfc] {\r\n  display: flex;\r\n  gap: 10px;\r\n  justify-content: flex-start;\r\n  flex-wrap: wrap;\n}\n.action-btn[data-v-7bb6ebfc] {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  padding: 8px 16px;\r\n  border: none;\r\n  border-radius: 8px;\r\n  font-size: 14px;\r\n  font-weight: 500;\r\n  cursor: pointer;\r\n  transition: all 0.2s ease;\r\n  gap: 8px;\r\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);\n}\n.action-btn i[data-v-7bb6ebfc] {\r\n  font-size: 16px;\n}\n.action-btn.edit[data-v-7bb6ebfc] {\r\n  background-color: #624DE3;\r\n  color: white;\n}\n.action-btn.edit[data-v-7bb6ebfc]:hover {\r\n  background-color: #5A45DD;\r\n  transform: translateY(-1px);\n}\n.action-btn.delete[data-v-7bb6ebfc] {\r\n  background-color: #FF3B30;\r\n  color: white;\n}\n.action-btn.delete[data-v-7bb6ebfc]:hover {\r\n  background-color: #E6352B;\r\n  transform: translateY(-1px);\n}\n.action-btn.view[data-v-7bb6ebfc] {\r\n  background-color: #34C759;\r\n  color: white;\n}\n.action-btn.view[data-v-7bb6ebfc]:hover {\r\n  background-color: #2FB350;\r\n  transform: translateY(-1px);\n}\r\n\r\n/* Add doctor button enhancement */\n.add-doctor-btn[data-v-7bb6ebfc] {\r\n  margin-bottom: 20px;\n}\n.btn-text[data-v-7bb6ebfc] {\r\n  background-color: #3b82f6;\r\n  color: white;\r\n  padding: 12px 24px;\r\n  border-radius: 8px;\r\n  font-weight: 500;\r\n  text-decoration: none;\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 8px;\r\n  transition: all 0.2s ease;\r\n  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);\n}\n.btn-text[data-v-7bb6ebfc]:hover {\r\n  background-color: #2563eb;\r\n  transform: translateY(-1px);\r\n  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);\n}\r\n\r\n/* ... rest of existing styles ... */\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -14321,7 +14352,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n /* Sidebar Menu */\nbody[data-v-f89414a0] {\n    font-family: 'Arial', sans-serif;\n    margin: 0;\n    display: flex;\n    background-color: #f0f0f0;\n}\n.sidebar[data-v-f89414a0] {\n    width: 250px;\n    background-color: #ffddd2;\n    padding: 20px;\n    position: fixed;\n    height: 100%;\n    top: 0;\n    left: 0;\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    margin-bottom: 30px;\n}\n.sidebar-logo img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    margin-right: 10px;\n}\n.sidebar-logo h1[data-v-f89414a0] {\n    font-size: 24px;\n    color: #333;\n    font-weight: bold;\n}\n.menu-title[data-v-f89414a0] {\n    margin-bottom: 20px;\n}\n.menu-title h2[data-v-f89414a0] {\n    font-size: 18px;\n    color: #333;\n}\n.dashboard-container[data-v-f89414a0] {\n    display: flex;\n    flex-direction: column;\n}\n.dashboard-item[data-v-f89414a0] {\n    margin: 10px 0;\n}\n.dashboard-item a[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    text-decoration: none;\n}\n.dashboard-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n    margin-right: 10px;\n}\n.dashboard-text[data-v-f89414a0] {\n    font-size: 16px;\n    color: #333;\n}\n\n/* search */\n.search-container[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    background-color: #f0f0f0;\n    margin-left: 20px;\n}\n.search-input[data-v-f89414a0] {\n    padding: 10px;\n    font-size: 16px;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    margin-right: 10px;\n    border-color: #333;\n}\n.search-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n}\n.dash-user-profile[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n}\n.user-info[data-v-f89414a0] {\n  display: flex;\n  align-items: center;\n}\n.user-avatar[data-v-f89414a0] {\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.user-details[data-v-f89414a0] {\n  margin-right: 10px;\n}\n.user-name[data-v-f89414a0] {\n  font-size: 18px;\n  color: #333;\n}\n.user-role[data-v-f89414a0] {\n  font-size: 14px;\n  color: #666;\n}\n\n\n\n\n/* Main Content */\n.main-content[data-v-f89414a0] {\n    margin-left: 250px;\n    padding: 20px;\n    padding-bottom: 500px;\n    background-color:#f0f0f0;\n}\n.header[data-v-f89414a0] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 20px;\n}\n.dropdown-icon[data-v-f89414a0] {\n    width: 20px;\n    height: 20px;\n}\n.logout-button[data-v-f89414a0] {\n    padding: 10px 20px;\n    background-color: #ff4d4d;\n    color: white;\n    border: none;\n    border-radius: 20px;\n    font-size: 14px;\n    cursor: pointer;\n}\n.logout-button.hidden[data-v-f89414a0] {\n    display: none;\n}\n\n/* Patients Section */\n.patient-overview[data-v-f89414a0] {\n    margin: 60px 0; \n    display: flex;\n    justify-content: center;\n}\n.dash-card[data-v-f89414a0] {\n    background-color: #DCC4E4; \n    padding: 30px;\n    border-radius: 15px;\n    text-align: center; \n    width: 300px;\n    height:100px;\n    display: flex; \n    align-items: center;\n}\n.dash-card img[data-v-f89414a0] {\n    width: 40px; \n    margin-right: 10px;\n}\n\n/* Updated card image size for consistency */\n.dash-card-content[data-v-f89414a0] {\n    display: flex; \n    flex-direction: column; \n    align-items: flex-start; \n    color: #333;\n}\n.dash-card-content h2[data-v-f89414a0] {\n    font-size: 20px; \n    font-weight: bold; \n    margin: 0;\n}\n.dash-card-content p[data-v-f89414a0] {\n    font-size: 14px; \n    color: #666; \n    margin: 5px 0;\n}\n.dash-card-content span[data-v-f89414a0] {\n    font-size: 16px; \n    font-weight: 600; \n    color: #000;\n}\n\n\n/* Doctors Section */\n.doctors-section[data-v-f89414a0] {\n    margin-top: 40px;\n}\n.doctors-section h2[data-v-f89414a0] {\n    margin-top: 100px;\n    font-size: 24px;\n    color: #5B392C;\n    margin-bottom: 20px;\n    margin-left: 50px;\n}\n.doctor-list[data-v-f89414a0] {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 20px;\n}\n.doctor-card[data-v-f89414a0] {\n    background-color: rgb(247, 217, 243);\n    color: rgb(0, 0, 0);\n    border: none;\n    padding: 20px;\n    font-size: 16px;\n    border-radius: 10px;\n    width: calc(50% - 10px); \n    text-align: center;\n    cursor: pointer;\n}\n.doctor-card[data-v-f89414a0]:hover {\n    background-color: #FF7F50;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n /* Sidebar Menu */\nbody[data-v-f89414a0] {\n    font-family: 'Arial', sans-serif;\n    margin: 0;\n    display: flex;\n    background-color: #f0f0f0;\n}\n.sidebar[data-v-f89414a0] {\n    width: 250px;\n    background-color: #ffddd2;\n    padding: 20px;\n    position: fixed;\n    height: 100%;\n    top: 0;\n    left: 0;\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    margin-bottom: 30px;\n}\n.sidebar-logo img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    margin-right: 10px;\n}\n.sidebar-logo h1[data-v-f89414a0] {\n    font-size: 24px;\n    color: #333;\n    font-weight: bold;\n}\n.menu-title[data-v-f89414a0] {\n    margin-bottom: 20px;\n}\n.menu-title h2[data-v-f89414a0] {\n    font-size: 18px;\n    color: #333;\n}\n.dashboard-container[data-v-f89414a0] {\n    display: flex;\n    flex-direction: column;\n}\n.dashboard-item[data-v-f89414a0] {\n    margin: 10px 0;\n}\n.dashboard-item a[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    text-decoration: none;\n}\n.dashboard-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n    margin-right: 10px;\n}\n.dashboard-text[data-v-f89414a0] {\n    font-size: 16px;\n    color: #333;\n}\n\n/* search */\n.search-container[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    background-color: #f0f0f0;\n    margin-left: 20px;\n}\n.search-input[data-v-f89414a0] {\n    padding: 10px;\n    font-size: 16px;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    margin-right: 10px;\n    border-color: #333;\n}\n.search-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n}\n.dash-user-profile[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n}\n.user-info[data-v-f89414a0] {\n  display: flex;\n  align-items: center;\n}\n.user-avatar[data-v-f89414a0] {\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.user-details[data-v-f89414a0] {\n  margin-right: 10px;\n}\n.user-name[data-v-f89414a0] {\n  font-size: 18px;\n  color: #333;\n}\n.user-role[data-v-f89414a0] {\n  font-size: 14px;\n  color: #666;\n}\n\n\n\n\n/* Main Content */\n.main-content[data-v-f89414a0] {\n    margin-left: 250px;\n    padding: 20px;\n    padding-bottom: 500px;\n    background-color:#f0f0f0;\n}\n.header[data-v-f89414a0] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 20px;\n}\n.dropdown-icon[data-v-f89414a0] {\n    width: 20px;\n    height: 20px;\n}\n.logout-button[data-v-f89414a0] {\n    padding: 10px 20px;\n    background-color: #ff4d4d;\n    color: white;\n    border: none;\n    border-radius: 20px;\n    font-size: 14px;\n    cursor: pointer;\n}\n.logout-button.hidden[data-v-f89414a0] {\n    display: none;\n}\n\n/* Patients Section */\n.patient-overview[data-v-f89414a0] {\n    margin: 60px 0;\n    display: flex;\n    justify-content: center;\n}\n.dash-card[data-v-f89414a0] {\n    background-color: #DCC4E4;\n    padding: 25px;\n    border-radius: 15px;\n    width: 300px;\n    display: flex;\n    align-items: center;\n    gap: 20px; /* Add spacing between icon and content */\n    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */\n    transition: transform 0.2s ease; /* Smooth hover effect */\n}\n.dash-card[data-v-f89414a0]:hover {\n    transform: translateY(-3px); /* Slight lift on hover */\n}\n.dash-card img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    padding: 10px;\n    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */\n    border-radius: 12px;\n}\n.dash-card-content[data-v-f89414a0] {\n    flex-grow: 1;\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n}\n.dash-card-content h2[data-v-f89414a0] {\n    font-size: 16px;\n    font-weight: 600;\n    color: #5B392C;\n    margin: 0;\n    margin-bottom: 4px;\n    text-transform: uppercase;\n    letter-spacing: 0.5px;\n}\n.dash-card-content p[data-v-f89414a0] {\n    font-size: 13px;\n    color: #666;\n    margin: 0;\n    margin-bottom: 8px;\n}\n.dash-card-content span[data-v-f89414a0] {\n    font-size: 24px;\n    font-weight: 700;\n    color: #5B392C;\n    background-color: rgba(255, 255, 255, 0.4);\n    padding: 4px 12px;\n    border-radius: 8px;\n}\n\n/* Doctors Section */\n.doctors-section[data-v-f89414a0] {\n    margin-top: 40px;\n}\n.doctors-section h2[data-v-f89414a0] {\n    margin-top: 100px;\n    font-size: 24px;\n    color: #5B392C;\n    margin-bottom: 20px;\n    margin-left: 50px;\n}\n.doctor-list[data-v-f89414a0] {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 20px;\n}\n.doctor-card[data-v-f89414a0] {\n    background-color: rgb(247, 217, 243);\n    color: rgb(0, 0, 0);\n    border: none;\n    padding: 20px;\n    font-size: 16px;\n    border-radius: 10px;\n    width: calc(50% - 10px); \n    text-align: center;\n    cursor: pointer;\n}\n.doctor-card[data-v-f89414a0]:hover {\n    background-color: #FF7F50;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -41301,66 +41332,85 @@ var render = function () {
                 _c("td", [_vm._v(_vm._s(appointment.treatment))]),
                 _vm._v(" "),
                 _c("td", [
-                  _c("span", { staticClass: "status" }, [
-                    _vm._v(_vm._s(appointment.status)),
-                  ]),
+                  _c(
+                    "span",
+                    {
+                      class: ["status-badge", appointment.status.toLowerCase()],
+                    },
+                    [
+                      _vm._v(
+                        "\n                  " +
+                          _vm._s(appointment.status) +
+                          "\n                "
+                      ),
+                    ]
+                  ),
                 ]),
                 _vm._v(" "),
                 _c("td", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "assign-btn",
-                      on: {
-                        click: function ($event) {
-                          return _vm.toggleDoctorDropdown(appointment)
+                  _c("div", { staticClass: "action-buttons" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "assign-btn",
+                        on: {
+                          click: function ($event) {
+                            return _vm.toggleDoctorDropdown(appointment)
+                          },
                         },
                       },
-                    },
-                    [_vm._v("\n                  Assign\n                ")]
-                  ),
-                  _vm._v(" "),
-                  appointment.showDropdown
-                    ? _c("div", { staticClass: "doctor-dropdown" }, [
-                        _c(
-                          "ul",
-                          _vm._l(_vm.doctors, function (doctor) {
-                            return _c(
-                              "li",
-                              {
-                                key: doctor.id,
-                                on: {
-                                  click: function ($event) {
-                                    return _vm.assignDoctor(appointment, doctor)
+                      [
+                        _vm._v(
+                          "\n                    Assign\n                  "
+                        ),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    appointment.showDropdown
+                      ? _c("div", { staticClass: "doctor-dropdown" }, [
+                          _c(
+                            "ul",
+                            _vm._l(_vm.doctors, function (doctor) {
+                              return _c(
+                                "li",
+                                {
+                                  key: doctor.id,
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.assignDoctor(
+                                        appointment,
+                                        doctor
+                                      )
+                                    },
                                   },
                                 },
-                              },
-                              [
-                                _vm._v(
-                                  "\n                      " +
-                                    _vm._s(doctor.name) +
-                                    "\n                    "
-                                ),
-                              ]
-                            )
-                          }),
-                          0
-                        ),
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "cancel-btn",
-                      on: {
-                        click: function ($event) {
-                          return _vm.cancelAppointment(appointment)
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(doctor.name) +
+                                      "\n                      "
+                                  ),
+                                ]
+                              )
+                            }),
+                            0
+                          ),
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "cancel-btn",
+                        on: {
+                          click: function ($event) {
+                            return _vm.cancelAppointment(appointment)
+                          },
                         },
                       },
-                    },
-                    [_vm._v("Cancel")]
-                  ),
+                      [_vm._v("Cancel")]
+                    ),
+                  ]),
                 ]),
               ])
             }),
@@ -42091,120 +42141,179 @@ var render = function () {
             "tbody",
             [
               _vm._l(_vm.displayedDoctors, function (doctor) {
-                return _c("tr", { key: doctor.id }, [
-                  _c("td", [_vm._v(_vm._s(doctor.name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(doctor.number))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(doctor.email))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(doctor.address))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "edit-button",
-                        on: {
-                          click: function ($event) {
-                            return _vm.editDoctor(doctor.id)
-                          },
-                        },
-                      },
-                      [_vm._v("Edit")]
-                    ),
+                return [
+                  _c("tr", { key: doctor.id }, [
+                    _c("td", [_vm._v(_vm._s(doctor.name))]),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "delete-button",
-                        on: {
-                          click: function ($event) {
-                            return _vm.deleteDoctor(doctor.id)
-                          },
-                        },
-                      },
-                      [_vm._v("Delete")]
-                    ),
+                    _c("td", [_vm._v(_vm._s(doctor.number))]),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "view-patients-button",
-                        on: {
-                          click: function ($event) {
-                            return _vm.togglePatients(doctor)
+                    _c("td", [_vm._v(_vm._s(doctor.email))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(doctor.address))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "action-buttons" }, [
+                      _c("div", { staticClass: "button-group" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "action-btn edit",
+                            on: {
+                              click: function ($event) {
+                                return _vm.editDoctor(doctor.id)
+                              },
+                            },
                           },
-                        },
-                      },
-                      [
-                        _vm._v(
-                          "\r\n                  " +
-                            _vm._s(
-                              doctor.showPatients
-                                ? "Hide Patients"
-                                : "View Patients"
-                            ) +
-                            "\r\n                "
+                          [
+                            _c("i", { staticClass: "fas fa-edit" }),
+                            _vm._v(" Edit\r\n                    "),
+                          ]
                         ),
-                      ]
-                    ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "action-btn delete",
+                            on: {
+                              click: function ($event) {
+                                return _vm.deleteDoctor(doctor.id)
+                              },
+                            },
+                          },
+                          [
+                            _c("i", { staticClass: "fas fa-trash" }),
+                            _vm._v(" Delete\r\n                    "),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "action-btn view",
+                            on: {
+                              click: function ($event) {
+                                return _vm.togglePatients(doctor)
+                              },
+                            },
+                          },
+                          [
+                            _c("i", {
+                              class: doctor.showPatients
+                                ? "fas fa-chevron-up"
+                                : "fas fa-chevron-down",
+                            }),
+                            _vm._v(
+                              "\r\n                      " +
+                                _vm._s(
+                                  doctor.showPatients
+                                    ? "Hide Patients"
+                                    : "View Patients"
+                                ) +
+                                "\r\n                    "
+                            ),
+                          ]
+                        ),
+                      ]),
+                    ]),
                   ]),
-                ])
-              }),
-              _vm._v(" "),
-              _vm._l(_vm.displayedDoctors, function (doctor) {
-                return doctor.showPatients
-                  ? _c(
-                      "tr",
-                      {
-                        key: "patients-" + doctor.id,
-                        staticClass: "patients-row",
-                      },
-                      [
-                        _c("td", { attrs: { colspan: "5" } }, [
-                          _c("div", { staticClass: "assigned-patients" }, [
-                            _c("h3", [_vm._v("Assigned Patients")]),
-                            _vm._v(" "),
-                            _c("table", { staticClass: "patients-table" }, [
-                              _vm._m(4, true),
+                  _vm._v(" "),
+                  doctor.showPatients
+                    ? _c(
+                        "tr",
+                        {
+                          key: "patients-" + doctor.id,
+                          staticClass: "patients-row",
+                        },
+                        [
+                          _c("td", { attrs: { colspan: "5" } }, [
+                            _c("div", { staticClass: "assigned-patients" }, [
+                              _c("div", { staticClass: "patients-header" }, [
+                                _c("h3", [_vm._v("Assigned Patients")]),
+                                _vm._v(" "),
+                                _c("span", { staticClass: "patient-count" }, [
+                                  _vm._v(
+                                    _vm._s(doctor.appointments.length) +
+                                      " patients"
+                                  ),
+                                ]),
+                              ]),
                               _vm._v(" "),
                               _c(
-                                "tbody",
-                                _vm._l(
-                                  doctor.appointments,
-                                  function (appointment) {
-                                    return _c("tr", { key: appointment.id }, [
-                                      _c("td", [
-                                        _vm._v(_vm._s(appointment.name)),
-                                      ]),
+                                "div",
+                                { staticClass: "patients-table-wrapper" },
+                                [
+                                  _c(
+                                    "table",
+                                    { staticClass: "patients-table" },
+                                    [
+                                      _vm._m(4, true),
                                       _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(
-                                          _vm._s(appointment.date) +
-                                            " " +
-                                            _vm._s(appointment.time)
+                                      _c(
+                                        "tbody",
+                                        _vm._l(
+                                          doctor.appointments,
+                                          function (appointment) {
+                                            return _c(
+                                              "tr",
+                                              { key: appointment.id },
+                                              [
+                                                _c("td", [
+                                                  _vm._v(
+                                                    _vm._s(appointment.name)
+                                                  ),
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("td", [
+                                                  _vm._v(
+                                                    _vm._s(appointment.date) +
+                                                      " " +
+                                                      _vm._s(appointment.time)
+                                                  ),
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("td", [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      appointment.treatment
+                                                    )
+                                                  ),
+                                                ]),
+                                                _vm._v(" "),
+                                                _c("td", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      class: [
+                                                        "status-badge",
+                                                        appointment.status.toLowerCase(),
+                                                      ],
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\r\n                                " +
+                                                          _vm._s(
+                                                            appointment.status
+                                                          ) +
+                                                          "\r\n                              "
+                                                      ),
+                                                    ]
+                                                  ),
+                                                ]),
+                                              ]
+                                            )
+                                          }
                                         ),
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(_vm._s(appointment.treatment)),
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("td", [
-                                        _vm._v(_vm._s(appointment.status)),
-                                      ]),
-                                    ])
-                                  }
-                                ),
-                                0
+                                        0
+                                      ),
+                                    ]
+                                  ),
+                                ]
                               ),
                             ]),
                           ]),
-                        ]),
-                      ]
-                    )
-                  : _vm._e()
+                        ]
+                      )
+                    : _vm._e(),
+                ]
               }),
             ],
             2

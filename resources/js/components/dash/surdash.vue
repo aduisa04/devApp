@@ -346,53 +346,67 @@ export default {
 
 /* Patients Section */
 .patient-overview {
-    margin: 60px 0; 
+    margin: 60px 0;
     display: flex;
     justify-content: center;
 }
 
 .dash-card {
-    background-color: #DCC4E4; 
-    padding: 30px;
+    background-color: #DCC4E4;
+    padding: 25px;
     border-radius: 15px;
-    text-align: center; 
     width: 300px;
-    height:100px;
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Add spacing between icon and content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    transition: transform 0.2s ease; /* Smooth hover effect */
+}
+
+.dash-card:hover {
+    transform: translateY(-3px); /* Slight lift on hover */
 }
 
 .dash-card img {
-    width: 40px; 
-    margin-right: 10px; 
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+    border-radius: 12px;
 }
 
-/* Updated card image size for consistency */
 .dash-card-content {
-    display: flex; 
-    flex-direction: column; 
-    align-items: flex-start; 
-    color: #333; 
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .dash-card-content h2 {
-    font-size: 20px; 
-    font-weight: bold; 
-    margin: 0; 
+    font-size: 16px;
+    font-weight: 600;
+    color: #5B392C;
+    margin: 0;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .dash-card-content p {
-    font-size: 14px; 
-    color: #666; 
-    margin: 5px 0; 
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+    margin-bottom: 8px;
 }
 
 .dash-card-content span {
-    font-size: 16px; 
-    font-weight: 600; 
-    color: #000; 
+    font-size: 24px;
+    font-weight: 700;
+    color: #5B392C;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 4px 12px;
+    border-radius: 8px;
 }
-
 
 /* Doctors Section */
 .doctors-section {

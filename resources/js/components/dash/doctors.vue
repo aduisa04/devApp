@@ -135,47 +135,65 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="doctor in displayedDoctors" :key="doctor.id">
-              <td>{{ doctor.name }}</td>
-              <td>{{ doctor.number }}</td>
-              <td>{{ doctor.email }}</td>
-              <td>{{ doctor.address }}</td>
-              <td>
-                <button @click="editDoctor(doctor.id)" class="edit-button">Edit</button>
-                <button @click="deleteDoctor(doctor.id)" class="delete-button">Delete</button>
-                <button @click="togglePatients(doctor)" class="view-patients-button">
-                  {{ doctor.showPatients ? 'Hide Patients' : 'View Patients' }}
-                </button>
-              </td>
-            </tr>
-            <tr v-for="doctor in displayedDoctors" 
-                v-if="doctor.showPatients" 
-                :key="`patients-${doctor.id}`" 
-                class="patients-row">
-              <td colspan="5">
-                <div class="assigned-patients">
-                  <h3>Assigned Patients</h3>
-                  <table class="patients-table">
-                    <thead>
-                      <tr>
-                        <th>Patient Name</th>
-                        <th>Appointment Date</th>
-                        <th>Treatment</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="appointment in doctor.appointments" :key="appointment.id">
-                        <td>{{ appointment.name }}</td>
-                        <td>{{ appointment.date }} {{ appointment.time }}</td>
-                        <td>{{ appointment.treatment }}</td>
-                        <td>{{ appointment.status }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </td>
-            </tr>
+            <!-- Loop through doctors -->
+            <template v-for="doctor in displayedDoctors">
+              <!-- Doctor row -->
+              <tr :key="doctor.id">
+                <td>{{ doctor.name }}</td>
+                <td>{{ doctor.number }}</td>
+                <td>{{ doctor.email }}</td>
+                <td>{{ doctor.address }}</td>
+                <td class="action-buttons">
+                  <div class="button-group">
+                    <button @click="editDoctor(doctor.id)" class="action-btn edit">
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button @click="deleteDoctor(doctor.id)" class="action-btn delete">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <button @click="togglePatients(doctor)" class="action-btn view">
+                      <i :class="doctor.showPatients ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                      {{ doctor.showPatients ? 'Hide Patients' : 'View Patients' }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Patients row -->
+              <tr v-if="doctor.showPatients" :key="`patients-${doctor.id}`" class="patients-row">
+                <td colspan="5">
+                  <div class="assigned-patients">
+                    <div class="patients-header">
+                      <h3>Assigned Patients</h3>
+                      <span class="patient-count">{{ doctor.appointments.length }} patients</span>
+                    </div>
+                    <div class="patients-table-wrapper">
+                      <table class="patients-table">
+                        <thead>
+                          <tr>
+                            <th>Patient Name</th>
+                            <th>Appointment Date</th>
+                            <th>Treatment</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="appointment in doctor.appointments" :key="appointment.id">
+                            <td>{{ appointment.name }}</td>
+                            <td>{{ appointment.date }} {{ appointment.time }}</td>
+                            <td>{{ appointment.treatment }}</td>
+                            <td>
+                              <span :class="['status-badge', appointment.status.toLowerCase()]">
+                                {{ appointment.status }}
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </template>
           </tbody>
         </table>
       </div>
@@ -205,7 +223,8 @@ export default {
           appointments: [],
           showPatients: false
         }));
-        this.displayedDoctors = this.doctors;
+        this.displayedDoctors = [...this.doctors]; // Create a new array reference
+        console.log('Doctors fetched:', this.displayedDoctors); // Debug log
       } catch (error) {
         console.error('Error fetching doctors:', error);
       }
@@ -407,10 +426,14 @@ body {
 
 /* Main Content */
 .main-content {
-    margin-left: 250px;
-    padding: 20px;
-    padding-bottom: 500px;
-    background-color:#f0f0f0;
+  margin-left: 250px;
+  padding: 20px;
+  padding-bottom: 50px;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
 }
 
 .header {
@@ -440,31 +463,25 @@ body {
 
 /* Doctors Section */
 .action-bar {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-left: 100px;
+  justify-content: flex-end; /* Align to the right */
+  padding: 0;
 }
 
-.add-doctor-btn a {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.add-doctor-btn a:hover {
-  background-color: #45a049;
+.add-doctor-btn {
+  margin: 0; /* Remove any existing margins */
 }
 
 .section-title {
-  font-size: 24px;
-  color: #333;
-  font-weight: bold;
-  margin-left: 80px;
+  font-size: 28px;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .doctors-table-doc {
@@ -556,67 +573,60 @@ body {
     margin-left: 50px;
   }
   .doctor-list {
-  padding: 15px;
-  margin-left: 100px;
-  background-color: #fafafa;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin: 20px auto;
+  padding: 30px;
+  width: 90%;
+  max-width: 1200px;
 }
 
 .doctor-list table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #F8F9FF;
+  box-shadow: 0 4px 20px rgba(98, 77, 227, 0.1);
 }
-
-.doctor-list th,
-.doctor-list td {
-  padding: 12px 15px;
-  border: 1px solid #e0e0e0;
-  text-align: left;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.doctor-list td {
-  padding: 12px 15px;
-  border: 1px solid #e0e0e0;
-  text-align: left;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin-right: 100px;
-}
-
 
 .doctor-list th {
-  background-color: #f7f7f7;
+  background-color: #624DE3;
+  color: white;
   font-weight: 600;
-  color: #333;
-  padding-right: 50px;
-}
-
-.doctor-list tr {
-  transition: background-color 0.3s;
-}
-
-.doctor-list tr:hover {
-  background-color: #f1f1f1;
+  padding: 20px 24px;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  border: none;
+  text-align: left;
 }
 
 .doctor-list td {
-  color: #555;
+  padding: 20px 24px;
+  font-size: 15px;
+  color: #2D3748;
+  background-color: #E8EAFF;
+  border-bottom: 2px solid #FFFFFF;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.doctor-list tr:last-child td {
-  border-bottom: none;
+.doctor-list tr:nth-child(even) td {
+  background-color: #F3F4FF;
 }
 
-.doctor-list th:first-child,
+.doctor-list tr:hover td {
+  background-color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(98, 77, 227, 0.1);
+}
+
 .doctor-list td:first-child {
-  padding-left: 20px;
-}
-
-.doctor-list th:last-child,
-.doctor-list td:last-child {
-  padding-right: 50px;
+  font-weight: 500;
+  color: #1a202c;
 }
 
 .edit-button,
@@ -665,30 +675,202 @@ body {
 }
 
 .patients-row {
-  background-color: #f8f9fa;
+  background-color: #f8fafc;
 }
 
 .assigned-patients {
-  padding: 15px;
+  padding: 25px;
+  background-color: #FAFBFF;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  margin: 15px;
+}
+
+.patients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #E6E8F7;
+}
+
+.patients-header h3 {
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.patient-count {
+  background-color: #e0f2fe;
+  color: #0284c7;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1);
 }
 
 .patients-table {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
   margin-top: 10px;
-  border-collapse: collapse;
-}
-
-.patients-table th,
-.patients-table td {
-  padding: 8px;
-  border: 1px solid #ddd;
-  text-align: left;
 }
 
 .patients-table th {
-  background-color: #e9ecef;
+  background-color: #5A45DD;
+  color: white;
+  font-weight: 600;
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
 }
 
+.patients-table tr:nth-child(even) td {
+  background-color: #F8F9FF;
+}
+
+.patients-table tr:nth-child(odd) td {
+  background-color: white;
+}
+
+.patients-table td {
+  padding: 16px 20px;
+  background-color: #E8EAFF;
+  border-bottom: 2px solid #FFFFFF;
+  color: #2D3748;
+  font-size: 14px;
+}
+
+.patients-table tr:hover td {
+  background-color: #FFFFFF !important;
+  transform: translateY(-1px);
+}
+
+/* Status badge styles */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.pending {
+  background-color: #FFF4DE;
+  color: #FFA043;
+}
+
+.completed {
+  background-color: #E6F7E9;
+  color: #34C759;
+}
+
+.cancelled {
+  background-color: #FFE6E6;
+  color: #FF3B30;
+}
+
+.ongoing {
+  background-color: #E6EDFE;
+  color: #624DE3;
+}
+
+/* Enhanced button styling */
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.action-btn i {
+  font-size: 16px;
+}
+
+.action-btn.edit {
+  background-color: #624DE3;
+  color: white;
+}
+
+.action-btn.edit:hover {
+  background-color: #5A45DD;
+  transform: translateY(-1px);
+}
+
+.action-btn.delete {
+  background-color: #FF3B30;
+  color: white;
+}
+
+.action-btn.delete:hover {
+  background-color: #E6352B;
+  transform: translateY(-1px);
+}
+
+.action-btn.view {
+  background-color: #34C759;
+  color: white;
+}
+
+.action-btn.view:hover {
+  background-color: #2FB350;
+  transform: translateY(-1px);
+}
+
+/* Add doctor button enhancement */
+.add-doctor-btn {
+  margin-bottom: 20px;
+}
+
+.btn-text {
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.btn-text:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+}
+
+/* ... rest of existing styles ... */
 </style>
   
   

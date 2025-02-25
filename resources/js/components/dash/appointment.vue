@@ -144,19 +144,25 @@
               <td>{{ appointment.phone }}</td>
               <td>{{ appointment.date }} {{ appointment.time }}</td>
               <td>{{ appointment.treatment }}</td>
-              <td><span class="status">{{ appointment.status }}</span></td>
               <td>
-                <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
-                  Assign
-                </button>
-                <div v-if="appointment.showDropdown" class="doctor-dropdown">
-                  <ul>
-                    <li v-for="doctor in doctors" :key="doctor.id" @click="assignDoctor(appointment, doctor)">
-                      {{ doctor.name }}
-                    </li>
-                  </ul>
+                <span :class="['status-badge', appointment.status.toLowerCase()]">
+                  {{ appointment.status }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="assign-btn" @click="toggleDoctorDropdown(appointment)">
+                    Assign
+                  </button>
+                  <div v-if="appointment.showDropdown" class="doctor-dropdown">
+                    <ul>
+                      <li v-for="doctor in doctors" :key="doctor.id" @click="assignDoctor(appointment, doctor)">
+                        {{ doctor.name }}
+                      </li>
+                    </ul>
+                  </div>
+                  <button class="cancel-btn" @click="cancelAppointment(appointment)">Cancel</button>
                 </div>
-                <button class="cancel-btn" @click="cancelAppointment(appointment)">Cancel</button>
               </td>
             </tr>
           </tbody>
@@ -447,82 +453,362 @@ export default {
   }
   
   .container {
-  margin: 50px auto;
-  max-width: 800px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 1200px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  }
+  
+  .container h1 {
+  font-size: 28px;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
   }
   
   .appointment-table {
   width: 100%;
-  border-collapse: collapse;
-  }
-  
-  .appointment-table th, .appointment-table td {
-  padding: 20px;
-  text-align: left;
-  border: 1px solid #ddd;
-  padding-left: 30px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #F8F9FF;
+  box-shadow: 0 4px 20px rgba(98, 77, 227, 0.1);
   }
   
   .appointment-table th {
-  background-color: #f4f4f4;
+  background-color: #624DE3;
+  color: white;
+  font-weight: 600;
+  padding: 20px 24px;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  border: none;
+  text-align: left;
   }
   
-  .status {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: green; /* Example status color */
+  .appointment-table td {
+  padding: 20px 24px;
+  font-size: 15px;
+  color: #2D3748;
+  background-color: #E8EAFF;
+  border-bottom: 2px solid #FFFFFF;
+  transition: all 0.2s ease;
+  position: relative;
+  }
+  
+  .appointment-table tr:nth-child(even) td {
+  background-color: #F3F4FF;
+  }
+  
+  .appointment-table tr:hover td {
+  background-color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(98, 77, 227, 0.1);
+  }
+  
+  .status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .assigned {
+  background-color: #E6F7E9;
+  color: #34C759;
+  border: 1px solid rgba(52, 199, 89, 0.1);
+  }
+  
+  .pending {
+  background-color: #FFF4DE;
+  color: #FFA043;
+  border: 1px solid rgba(255, 160, 67, 0.1);
+  }
+  
+  .cancelled {
+  background-color: #FFE6E6;
+  color: #FF3B30;
+  border: 1px solid rgba(255, 59, 48, 0.1);
+  }
+  
+  .completed {
+  background-color: #E6EDFE;
+  color: #624DE3;
+  border: 1px solid rgba(98, 77, 227, 0.1);
+  }
+  
+  .assign-btn, .cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-right: 8px;
   }
   
   .assign-btn {
-  background-color: #3498db;
+  position: relative;
+  background-color: #624DE3;
   color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  z-index: 999;
   }
   
   .assign-btn:hover {
-  background-color: #2980b9;
+  background-color: #5A45DD;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(98, 77, 227, 0.2);
+  }
+  
+  .cancel-btn {
+  background-color: #FF3B30;
+  color: white;
+  }
+  
+  .cancel-btn:hover {
+  background-color: #E6352B;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(255, 59, 48, 0.2);
   }
   
   .doctor-dropdown {
   position: absolute;
-  background-color: white;
-  border: 1px solid #ddd;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  top: calc(100% + 5px); /* Position below the button with a small gap */
+  right: 0; /* Align to the right instead of left */
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid rgba(98, 77, 227, 0.15);
+  box-shadow: 0 8px 24px rgba(98, 77, 227, 0.15);
+  padding: 8px 0;
   z-index: 1000;
+  min-width: 220px;
+  animation: dropdownFade 0.2s ease;
+  /* Ensure the dropdown doesn't go off-screen on the right */
+  max-width: 300px;
+  /* Add max-height to prevent very long dropdowns */
+  max-height: 400px;
+  overflow-y: auto;
+  }
+  
+  @keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  }
+  
+  .doctor-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px; /* Align arrow to the right */
+  left: auto; /* Remove left positioning */
+  width: 12px;
+  height: 12px;
+  background-color: #FFFFFF;
+  border-left: 1px solid rgba(98, 77, 227, 0.15);
+  border-top: 1px solid rgba(98, 77, 227, 0.15);
+  transform: rotate(45deg);
   }
   
   .doctor-dropdown ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  }
+  
+  .doctor-dropdown ul::-webkit-scrollbar {
+  width: 8px;
+  }
+  
+  .doctor-dropdown ul::-webkit-scrollbar-track {
+  background: #F0F3FF;
+  border-radius: 4px;
+  }
+  
+  .doctor-dropdown ul::-webkit-scrollbar-thumb {
+  background: #624DE3;
+  border-radius: 4px;
   }
   
   .doctor-dropdown li {
-  padding: 8px 12px;
+  padding: 12px 16px;
   cursor: pointer;
+  color: #2D3748;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  }
+  
+  .doctor-dropdown li:not(:last-child) {
+  border-bottom: 1px solid rgba(98, 77, 227, 0.08);
   }
   
   .doctor-dropdown li:hover {
-  background-color: #f1f1f1;
+  background-color: #F0F3FF;
+  color: #624DE3;
+  padding-left: 20px;
   }
   
-  .cancel-btn {
-  background-color: #e74c3c;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  .doctor-dropdown li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 0;
+  background-color: #624DE3;
+  transition: height 0.2s ease;
   }
   
-  .cancel-btn:hover {
-  background-color: #c0392b;
+  .doctor-dropdown li:hover::before {
+  height: 100%;
+  }
+  
+  /* Add position relative to td containing the dropdown */
+  .appointment-table td {
+  position: relative;
+  }
+  
+  /* Ensure the dropdown appears above other elements */
+  .appointment-table tr:hover {
+  z-index: 10;
+  position: relative;
+  }
+
+  /* Adjust the action buttons container */
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    position: relative;
+  }
+
+  /* Updated dropdown positioning */
+  .doctor-dropdown {
+    position: absolute;
+    top: calc(100% + 5px); /* Position below the button with a small gap */
+    right: 0; /* Align to the right instead of left */
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid rgba(98, 77, 227, 0.15);
+    box-shadow: 0 8px 24px rgba(98, 77, 227, 0.15);
+    padding: 8px 0;
+    z-index: 1000;
+    min-width: 220px;
+    animation: dropdownFade 0.2s ease;
+    /* Ensure the dropdown doesn't go off-screen on the right */
+    max-width: 300px;
+    /* Add max-height to prevent very long dropdowns */
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  /* Adjust the arrow position for right alignment */
+  .doctor-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    right: 20px; /* Align arrow to the right */
+    left: auto; /* Remove left positioning */
+    width: 12px;
+    height: 12px;
+    background-color: #FFFFFF;
+    border-left: 1px solid rgba(98, 77, 227, 0.15);
+    border-top: 1px solid rgba(98, 77, 227, 0.15);
+    transform: rotate(45deg);
+  }
+
+  /* Ensure the dropdown list is scrollable if too long */
+  .doctor-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  /* Add some spacing in the table cell for the dropdown */
+  .appointment-table td:last-child {
+    min-width: 200px; /* Ensure enough space for buttons */
+    padding-right: 30px; /* Add some extra padding on the right */
+  }
+
+  /* Make sure the buttons stay visible */
+  .assign-btn, .cancel-btn {
+    position: relative;
+    z-index: 998; /* Slightly lower than dropdown */
+  }
+
+  /* When dropdown is open, ensure it's above other elements */
+  .doctor-dropdown {
+    z-index: 1000;
+  }
+
+  /* Update table row z-index behavior */
+  .appointment-table tr {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* When row has active dropdown, bring it to front */
+  .appointment-table tr:has(.doctor-dropdown) {
+    z-index: 1000;
+  }
+
+  /* Action buttons container */
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    position: relative;
+    z-index: 2; /* Base z-index for the container */
+  }
+
+  /* Update dropdown to ensure it's always on top */
+  .doctor-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid rgba(98, 77, 227, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+    z-index: 9999; /* Much higher z-index to ensure it's above everything */
+    min-width: 200px;
+    max-width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  /* Ensure the table cell containing the dropdown has the correct stacking context */
+  .appointment-table td:last-child {
+    position: relative;
+    z-index: 2;
   }
 </style>
 
