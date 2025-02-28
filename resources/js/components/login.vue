@@ -46,22 +46,34 @@ export default {
 
         if (response.data.message === "Login successful") {
           const user = response.data.user;
+          
+          // Store user data
+          localStorage.setItem("user", JSON.stringify(user));
+          
+          // Debug logs
+          console.log("Login successful");
+          console.log("User data:", user);
+          console.log("User role:", user.role);
 
-          // Store complete user data in localStorage
-          localStorage.setItem("0", JSON.stringify(user));
-
-          // Redirect based on user role
-          if (user.role === "1") {
+          // Convert role to number for comparison
+          const userRole = parseInt(user.role);
+          
+          if (userRole === 1) {
+            console.log("Redirecting to admin dashboard");
             this.$router.push("/surdash");
-          } else {
+          } else if (userRole === 0) {
+            console.log("Redirecting to user home");
             this.$router.push("/");
+          } else {
+            console.log("Invalid role:", userRole);
+            alert("Invalid user role");
           }
         } else {
           alert(response.data.message || "Login failed, please try again.");
         }
       } catch (error) {
+        console.error("Login error:", error);
         alert(error.response?.data?.message || "An error occurred while logging in.");
-        console.error(error);
       }
     },
   },

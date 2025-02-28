@@ -1,9 +1,11 @@
-
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #ffddd2;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 a {
@@ -22,20 +24,26 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .logo-container {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .logo {
     height: 50px;
+    width: auto;
     margin-right: 10px;
-    margin-left: 50px;
+    margin-left: 20px;
 }
+
 .sur {
     width: 300px; 
     height: auto;
@@ -50,12 +58,15 @@ html {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 10px;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+    flex-wrap: nowrap;
 }
 
 .nav-links li {
-    margin-left: 30px;
-    justify-items: center;
+    margin: 0;
+    white-space: nowrap;
 }
 
 .nav-links li a {
@@ -72,6 +83,9 @@ html {
 .profile {
     display: flex;
     align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    position: relative;
 }
 
 .profile-pic {
@@ -87,9 +101,10 @@ html {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     padding: 3px;
     border-radius: 10px;
-    margin-top: 100px;
-    margin-left: 60px;
-    z-index: 1;
+    right: 20px;
+    top: 100%;
+    z-index: 1000;
+    min-width: 150px;
 }
 
 .dropdown-menu a {
@@ -97,10 +112,12 @@ html {
     padding: 10px 20px;
     color: black;
     text-decoration: none;
+    text-align: left;
 }
 
 .dropdown-menu a:hover {
     background-color: #f1f1f1;
+    border-radius: 8px;
 }
 
 /* Show the dropdown when it is active */
@@ -181,6 +198,10 @@ html {
     max-width: 1000px;
     margin: 0 auto;
     gap: 30px; /* Add space between image and text */
+    width: 90%;
+    max-width: 1200px;
+    padding: 2rem 5%;
+    margin: 0 auto;
 }
 
 /* Image on the left */
@@ -188,6 +209,7 @@ html {
     max-width: 100%;
     height: auto;
     width: 400px; /* Adjust width as needed */
+    object-fit: contain;
 }
 
 /* Welcome Text on the right */
@@ -249,10 +271,13 @@ html {
 
 /* Guarantee Cards */
 .guarantee-cards {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 60px;
+    gap: 30px;
 }
 
 .cardG {
@@ -264,6 +289,9 @@ html {
     text-align: center;
     height: 220px;
     width:180px;
+    flex: 1;
+    min-width: 160px;
+    max-width: 180px;
 
 
 }
@@ -317,6 +345,13 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 90%;
+    max-width: 1200px;
+    padding: 3rem 5%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .footer-logo {
@@ -401,6 +436,12 @@ footer p {
     margin-left: auto;
     margin-right: auto;
     column-gap: 0%;
+    width: 90%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 5%;
 
 }
 
@@ -413,6 +454,9 @@ footer p {
     cursor: pointer;
     border-radius: 10px;
     width: 210px;
+    width: 100%;
+    max-width: 210px;
+    margin: 0 auto;
 
 }
 
@@ -427,6 +471,9 @@ footer p {
      object-fit: cover; 
     object-position: center; 
     border-radius: 10px;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 
 
 }
@@ -565,6 +612,10 @@ footer p {
     margin-right: auto;
     margin-top: 148px;
     margin-bottom: 160px;
+    width: 90%;
+    max-width: 600px;
+    margin: 148px auto 160px;
+    padding: 30px 5%;
 }
 
 h2 {
@@ -671,6 +722,10 @@ button[type="button"]:hover {
     margin-top: 100px;
     margin-bottom: auto;
     height: 400px;
+    width: 90%;
+    max-width: 300px;
+    margin: 100px auto;
+    padding: 40px 5%;
 }
 
 .login-box h2{
@@ -759,6 +814,10 @@ input {
     margin-top: 100px;
     margin-bottom: auto;
     height: 300px;
+    width: 90%;
+    max-width: 300px;
+    margin: 100px auto;
+    padding: 40px 5%;
 }
 
 .admin-box h2{
@@ -839,6 +898,10 @@ input {
     margin-bottom: auto;
     height: 400px;
     padding-bottom: 100px;
+    width: 90%;
+    max-width: 300px;
+    margin: 100px auto;
+    padding: 40px 5%;
 }
 
 .acc-box h2{
@@ -866,6 +929,10 @@ input {
     height: 400px;
     padding-bottom: 350px;
     gap: 50px;
+    width: 90%;
+    max-width: 300px;
+    margin: 100px auto;
+    padding: 40px 5%;
 }
 
 .signup-box h2{
@@ -924,4 +991,222 @@ input {
 .gifcontainer {
     display: flex;
     flex-direction: column; /* Stack the buttons and form vertically */
+}
+
+/* Responsive Navigation */
+@media screen and (max-width: 768px) {
+    .topnav {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .logo-container {
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        margin-left: 0;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .nav-links li {
+        margin: 5px 0;
+    }
+
+    .profile {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        right: 50%;
+        transform: translateX(50%);
+        top: 100%;
+        width: 200px;
+        margin-top: 10px;
+    }
+}
+
+/* Responsive Welcome Section */
+@media screen and (max-width: 992px) {
+  .welcome-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .welcome-image {
+    max-width: 80%;
+    margin-bottom: 2rem;
+  }
+
+  .welcome-text {
+    width: 100%;
+    padding: 0;
+  }
+
+  .guarantee-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cardG {
+    width: 80%;
+    margin: 1rem 0;
+  }
+}
+
+/* Responsive Footer */
+@media screen and (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .footer-logo, .footer-center, .footer-contact {
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .footer-center .description br {
+    display: none;
+  }
+}
+
+/* Base styles adjustments */
+.welcome-container {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.welcome-image {
+  max-width: 50%;
+  height: auto;
+}
+
+.guarantee-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.cardG {
+  flex: 1;
+  min-width: 250px;
+  max-width: 350px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+/* Enhanced responsive breakpoints */
+@media screen and (max-width: 1024px) {
+    .gallery-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .topnav {
+        padding: 10px 3%;
+    }
+
+    .logo {
+        margin-left: 10px;
+    }
+
+    .welcome-container {
+        padding: 1rem 3%;
+    }
+
+    .form-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-buttons {
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    .footer-container {
+        padding: 2rem 3%;
+    }
+
+    .footer-logo, 
+    .footer-center, 
+    .footer-contact {
+        width: 100%;
+        text-align: center;
+        margin: 1rem 0;
+    }
+
+    .social-icons {
+        justify-content: center;
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .gallery-container {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-card {
+        max-width: 100%;
+    }
+
+    .welcome-text h1 {
+        font-size: 28px;
+    }
+
+    .welcome-text p {
+        font-size: 16px;
+    }
+}
+
+/* Fix for login and signup boxes */
+.login-box,
+.signup-box,
+.admin-box,
+.acc-box {
+    width: 90%;
+    max-width: 300px;
+    margin: 100px auto;
+    padding: 40px 5%;
+}
+
+/* Guarantee cards adjustment */
+.guarantee-cards {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.cardG {
+    flex: 1;
+    min-width: 160px;
+    max-width: 180px;
 }

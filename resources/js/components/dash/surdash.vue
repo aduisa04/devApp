@@ -97,19 +97,19 @@
 <!--users-->
 
           <section class="dash-user-profile">
-            <div class="user-info">
+            <div class="user-info" @click="toggleLogout">
               <img
-                src="img/clarenceadmin.jpg"
-                alt="Moni Roy's profile picture"
+                :src="userProfile.avatar || 'img/default-avatar.jpg'"
+                :alt="userProfile.name + '\'s profile picture'"
                 class="user-avatar"
               />
               <div class="user-details">
-                <h2 class="user-name">Gumball</h2>
-                <p class="user-role">Admin</p>
+                <h2 class="user-name">{{ userProfile.name }}</h2>
+                <p class="user-role">{{ userProfile.role }}</p>
               </div>
               <img src="img/dropdown.png" alt="Dropdown icon" class="dropdown-icon" />
             </div>
-            <button class="logout-button hidden" id="logout-button">
+            <button class="logout-button" @click="handleLogout">
               <span class="logout-text">Logout</span>
             </button>
           </section>
@@ -156,11 +156,18 @@ export default {
   data() {
     return {
       doctors: [], // Array to hold the doctors data
+      userProfile: {
+        name: '',
+        role: '',
+        avatar: ''
+      },
+      showLogout: false
     };
   },
   mounted() {
     // Fetch doctors from the backend when the component is mounted
     this.fetchDoctors();
+    this.fetchUserProfile();
   },
   methods: {
     goToDoctorProfile(doctorId) {
@@ -176,6 +183,49 @@ export default {
           console.error("Error fetching doctors:", error);
         });
     },
+    fetchUserProfile() {
+      // Get the user data from localStorage or wherever you store it after login
+      const userData = JSON.parse(localStorage.getItem('user')); // Assuming you store user data here
+      
+      if (userData) {
+        this.userProfile = {
+          name: userData.first_name + ' ' + userData.last_name, // Combine first and last name
+          role: userData.role === 1 ? 'Admin' : 'User', // If role is 1, show as Admin
+          avatar: userData.profile_picture || 'img/default-avatar.jpg' // Use profile picture if available
+        };
+      } else {
+        // If no user data in storage, try fetching from API
+        axios.get('/api/user-profile')
+          .then((response) => {
+            if (response.data) {
+              this.userProfile = {
+                name: response.data.first_name + ' ' + response.data.last_name, // Combine first and last name
+                role: response.data.role === 1 ? 'Admin' : 'User',
+                avatar: response.data.profile_picture || 'img/default-avatar.jpg'
+              };
+              // Optionally store the user data
+              localStorage.setItem('user', JSON.stringify(response.data));
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user profile:", error);
+            this.userProfile = {
+              name: 'Unknown User',
+              role: 'Guest',
+              avatar: 'img/default-avatar.jpg'
+            };
+          });
+      }
+    },
+    toggleLogout() {
+      this.showLogout = !this.showLogout;
+    },
+    handleLogout() {
+      // Clear user data from localStorage
+      localStorage.removeItem('user');
+      // Redirect to login page
+      this.$router.push('/login');
+    }
   },
 };
 </script>
@@ -279,36 +329,66 @@ export default {
 .dash-user-profile {
     display: flex;
     align-items: center;
+    position: relative;
 }
 
 .user-info {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
 .user-details {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 .user-name {
-  font-size: 18px;
-  color: #333;
+    font-size: 18px;
+    color: #333;
+    margin: 0;
 }
 
 .user-role {
-  font-size: 14px;
-  color: #666;
+    font-size: 14px;
+    color: #666;
+    margin: 0;
 }
 
+.dropdown-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 
+.logout-button {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+    margin-top: 5px;
+    z-index: 1000;
+}
 
+.logout-button:hover {
+    background-color: #ff3333;
+}
+
+.dash-user-profile:hover .logout-button {
+    display: block;
+}
 
 /* Main Content */
 .main-content {
@@ -323,11 +403,6 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.dropdown-icon {
-    width: 20px;
-    height: 20px;
 }
 
 .logout-button {

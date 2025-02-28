@@ -5686,83 +5686,122 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     }
   },
   created: function created() {
-    this.fetchClinics();
-    // Check if user data exists in localStorage
-    var userData = localStorage.getItem("0");
-    if (userData) {
-      var user = JSON.parse(userData);
-      this.firstName = user.first_name;
-      this.lastName = user.last_name;
-      this.profilePic = user.profile_picture || "/img/default-profile.jpg";
+    // Add authentication token to all axios requests
+    var token = localStorage.getItem('token'); // or however you store your auth token
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = "Bearer ".concat(token);
     }
-
-    // Also fetch latest data from API
+    this.fetchClinics();
     this.getUserProfile();
   },
   methods: {
     fetchClinics: function fetchClinics() {
       var _this = this;
-      // Fetch clinics from the API
-      axios.get('/api/clinics').then(function (response) {
-        _this.clinics = response.data;
-      })["catch"](function (error) {
-        console.error("There was an error fetching the clinics:", error);
-      });
-    },
-    getUserProfile: function getUserProfile() {
-      var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var response;
+        var response, _error$response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return axios.get("/api/user");
+              return axios.get('/api/clinics', {
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                }
+              });
             case 3:
               response = _context.sent;
-              if (response.data) {
-                _this2.firstName = response.data.first_name;
-                _this2.lastName = response.data.last_name;
-                _this2.profilePic = response.data.profile_picture || "/img/default-profile.jpg";
-              }
-              _context.next = 10;
+              console.log('Clinics response:', response.data);
+              _this.clinics = response.data;
+              _context.next = 12;
               break;
-            case 7:
-              _context.prev = 7;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](0);
-              console.error("Error fetching user profile:", _context.t0);
-            case 10:
+              console.error("There was an error fetching the clinics:", _context.t0);
+              if (((_error$response = _context.t0.response) === null || _error$response === void 0 ? void 0 : _error$response.status) === 401) {
+                // Handle unauthorized access - maybe redirect to login
+                _this.$router.push('/login');
+              }
+            case 12:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[0, 8]]);
       }))();
     },
-    logout: function logout() {
-      var _this3 = this;
+    getUserProfile: function getUserProfile() {
+      var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response, _error$response2;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
               _context2.next = 3;
-              return axios.post("/logout");
+              return axios.get("/api/user", {
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                }
+              });
             case 3:
-              localStorage.removeItem("0"); // Clear stored user data
-              _this3.$router.push("/login");
-              _context2.next = 10;
+              response = _context2.sent;
+              if (response.data) {
+                _this2.firstName = response.data.first_name;
+                _this2.lastName = response.data.last_name;
+                _this2.profilePic = response.data.profile_picture || "/img/default-profile.jpg";
+              }
+              _context2.next = 11;
               break;
             case 7:
               _context2.prev = 7;
               _context2.t0 = _context2["catch"](0);
-              console.error("Error logging out:", _context2.t0);
-            case 10:
+              console.error("Error fetching user profile:", _context2.t0);
+              if (((_error$response2 = _context2.t0.response) === null || _error$response2 === void 0 ? void 0 : _error$response2.status) === 401) {
+                // Handle unauthorized access - maybe redirect to login
+                _this2.$router.push('/login');
+              }
+            case 11:
             case "end":
               return _context2.stop();
           }
         }, _callee2, null, [[0, 7]]);
       }))();
+    },
+    logout: function logout() {
+      var _this3 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return axios.post("/logout");
+            case 3:
+              localStorage.removeItem("0"); // Clear stored user data
+              _this3.$router.push("/login");
+              _context3.next = 10;
+              break;
+            case 7:
+              _context3.prev = 7;
+              _context3.t0 = _context3["catch"](0);
+              console.error("Error logging out:", _context3.t0);
+            case 10:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3, null, [[0, 7]]);
+      }))();
+    },
+    getLogoUrl: function getLogoUrl(logo) {
+      // If the logo path starts with http or https, it's already a full URL
+      if (logo && (logo.startsWith('http://') || logo.startsWith('https://'))) {
+        return logo;
+      }
+      // Otherwise, prepend the complete storage path including images/clinics
+      return logo ? "/storage/images/clinics/".concat(logo) : '/img/default-clinic-logo.png';
     }
   }
 });
@@ -7887,12 +7926,20 @@ __webpack_require__.r(__webpack_exports__);
   name: "SurDash",
   data: function data() {
     return {
-      doctors: [] // Array to hold the doctors data
+      doctors: [],
+      // Array to hold the doctors data
+      userProfile: {
+        name: '',
+        role: '',
+        avatar: ''
+      },
+      showLogout: false
     };
   },
   mounted: function mounted() {
     // Fetch doctors from the backend when the component is mounted
     this.fetchDoctors();
+    this.fetchUserProfile();
   },
   methods: {
     goToDoctorProfile: function goToDoctorProfile(doctorId) {
@@ -7906,6 +7953,51 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.error("Error fetching doctors:", error);
       });
+    },
+    fetchUserProfile: function fetchUserProfile() {
+      var _this2 = this;
+      // Get the user data from localStorage or wherever you store it after login
+      var userData = JSON.parse(localStorage.getItem('user')); // Assuming you store user data here
+
+      if (userData) {
+        this.userProfile = {
+          name: userData.first_name + ' ' + userData.last_name,
+          // Combine first and last name
+          role: userData.role === 1 ? 'Admin' : 'User',
+          // If role is 1, show as Admin
+          avatar: userData.profile_picture || 'img/default-avatar.jpg' // Use profile picture if available
+        };
+      } else {
+        // If no user data in storage, try fetching from API
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/user-profile').then(function (response) {
+          if (response.data) {
+            _this2.userProfile = {
+              name: response.data.first_name + ' ' + response.data.last_name,
+              // Combine first and last name
+              role: response.data.role === 1 ? 'Admin' : 'User',
+              avatar: response.data.profile_picture || 'img/default-avatar.jpg'
+            };
+            // Optionally store the user data
+            localStorage.setItem('user', JSON.stringify(response.data));
+          }
+        })["catch"](function (error) {
+          console.error("Error fetching user profile:", error);
+          _this2.userProfile = {
+            name: 'Unknown User',
+            role: 'Guest',
+            avatar: 'img/default-avatar.jpg'
+          };
+        });
+      }
+    },
+    toggleLogout: function toggleLogout() {
+      this.showLogout = !this.showLogout;
+    },
+    handleLogout: function handleLogout() {
+      // Clear user data from localStorage
+      localStorage.removeItem('user');
+      // Redirect to login page
+      this.$router.push('/login');
     }
   }
 });
@@ -8881,7 +8973,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     handleLogin: function handleLogin() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var response, user, _error$response;
+        var response, user, userRole, _error$response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -8894,14 +8986,25 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 3:
               response = _context.sent;
               if (response.data.message === "Login successful") {
-                user = response.data.user; // Store complete user data in localStorage
-                localStorage.setItem("0", JSON.stringify(user));
+                user = response.data.user; // Store user data
+                localStorage.setItem("user", JSON.stringify(user));
 
-                // Redirect based on user role
-                if (user.role === "1") {
+                // Debug logs
+                console.log("Login successful");
+                console.log("User data:", user);
+                console.log("User role:", user.role);
+
+                // Convert role to number for comparison
+                userRole = parseInt(user.role);
+                if (userRole === 1) {
+                  console.log("Redirecting to admin dashboard");
                   _this.$router.push("/surdash");
-                } else {
+                } else if (userRole === 0) {
+                  console.log("Redirecting to user home");
                   _this.$router.push("/");
+                } else {
+                  console.log("Invalid role:", userRole);
+                  alert("Invalid user role");
                 }
               } else {
                 alert(response.data.message || "Login failed, please try again.");
@@ -8911,8 +9014,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 7:
               _context.prev = 7;
               _context.t0 = _context["catch"](0);
+              console.error("Login error:", _context.t0);
               alert(((_error$response = _context.t0.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || "An error occurred while logging in.");
-              console.error(_context.t0);
             case 11:
             case "end":
               return _context.stop();
@@ -14352,7 +14455,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n /* Sidebar Menu */\nbody[data-v-f89414a0] {\n    font-family: 'Arial', sans-serif;\n    margin: 0;\n    display: flex;\n    background-color: #f0f0f0;\n}\n.sidebar[data-v-f89414a0] {\n    width: 250px;\n    background-color: #ffddd2;\n    padding: 20px;\n    position: fixed;\n    height: 100%;\n    top: 0;\n    left: 0;\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    margin-bottom: 30px;\n}\n.sidebar-logo img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    margin-right: 10px;\n}\n.sidebar-logo h1[data-v-f89414a0] {\n    font-size: 24px;\n    color: #333;\n    font-weight: bold;\n}\n.menu-title[data-v-f89414a0] {\n    margin-bottom: 20px;\n}\n.menu-title h2[data-v-f89414a0] {\n    font-size: 18px;\n    color: #333;\n}\n.dashboard-container[data-v-f89414a0] {\n    display: flex;\n    flex-direction: column;\n}\n.dashboard-item[data-v-f89414a0] {\n    margin: 10px 0;\n}\n.dashboard-item a[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    text-decoration: none;\n}\n.dashboard-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n    margin-right: 10px;\n}\n.dashboard-text[data-v-f89414a0] {\n    font-size: 16px;\n    color: #333;\n}\n\n/* search */\n.search-container[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    background-color: #f0f0f0;\n    margin-left: 20px;\n}\n.search-input[data-v-f89414a0] {\n    padding: 10px;\n    font-size: 16px;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    margin-right: 10px;\n    border-color: #333;\n}\n.search-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n}\n.dash-user-profile[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n}\n.user-info[data-v-f89414a0] {\n  display: flex;\n  align-items: center;\n}\n.user-avatar[data-v-f89414a0] {\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;\n  margin-right: 10px;\n}\n.user-details[data-v-f89414a0] {\n  margin-right: 10px;\n}\n.user-name[data-v-f89414a0] {\n  font-size: 18px;\n  color: #333;\n}\n.user-role[data-v-f89414a0] {\n  font-size: 14px;\n  color: #666;\n}\n\n\n\n\n/* Main Content */\n.main-content[data-v-f89414a0] {\n    margin-left: 250px;\n    padding: 20px;\n    padding-bottom: 500px;\n    background-color:#f0f0f0;\n}\n.header[data-v-f89414a0] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 20px;\n}\n.dropdown-icon[data-v-f89414a0] {\n    width: 20px;\n    height: 20px;\n}\n.logout-button[data-v-f89414a0] {\n    padding: 10px 20px;\n    background-color: #ff4d4d;\n    color: white;\n    border: none;\n    border-radius: 20px;\n    font-size: 14px;\n    cursor: pointer;\n}\n.logout-button.hidden[data-v-f89414a0] {\n    display: none;\n}\n\n/* Patients Section */\n.patient-overview[data-v-f89414a0] {\n    margin: 60px 0;\n    display: flex;\n    justify-content: center;\n}\n.dash-card[data-v-f89414a0] {\n    background-color: #DCC4E4;\n    padding: 25px;\n    border-radius: 15px;\n    width: 300px;\n    display: flex;\n    align-items: center;\n    gap: 20px; /* Add spacing between icon and content */\n    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */\n    transition: transform 0.2s ease; /* Smooth hover effect */\n}\n.dash-card[data-v-f89414a0]:hover {\n    transform: translateY(-3px); /* Slight lift on hover */\n}\n.dash-card img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    padding: 10px;\n    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */\n    border-radius: 12px;\n}\n.dash-card-content[data-v-f89414a0] {\n    flex-grow: 1;\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n}\n.dash-card-content h2[data-v-f89414a0] {\n    font-size: 16px;\n    font-weight: 600;\n    color: #5B392C;\n    margin: 0;\n    margin-bottom: 4px;\n    text-transform: uppercase;\n    letter-spacing: 0.5px;\n}\n.dash-card-content p[data-v-f89414a0] {\n    font-size: 13px;\n    color: #666;\n    margin: 0;\n    margin-bottom: 8px;\n}\n.dash-card-content span[data-v-f89414a0] {\n    font-size: 24px;\n    font-weight: 700;\n    color: #5B392C;\n    background-color: rgba(255, 255, 255, 0.4);\n    padding: 4px 12px;\n    border-radius: 8px;\n}\n\n/* Doctors Section */\n.doctors-section[data-v-f89414a0] {\n    margin-top: 40px;\n}\n.doctors-section h2[data-v-f89414a0] {\n    margin-top: 100px;\n    font-size: 24px;\n    color: #5B392C;\n    margin-bottom: 20px;\n    margin-left: 50px;\n}\n.doctor-list[data-v-f89414a0] {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 20px;\n}\n.doctor-card[data-v-f89414a0] {\n    background-color: rgb(247, 217, 243);\n    color: rgb(0, 0, 0);\n    border: none;\n    padding: 20px;\n    font-size: 16px;\n    border-radius: 10px;\n    width: calc(50% - 10px); \n    text-align: center;\n    cursor: pointer;\n}\n.doctor-card[data-v-f89414a0]:hover {\n    background-color: #FF7F50;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n /* Sidebar Menu */\nbody[data-v-f89414a0] {\n    font-family: 'Arial', sans-serif;\n    margin: 0;\n    display: flex;\n    background-color: #f0f0f0;\n}\n.sidebar[data-v-f89414a0] {\n    width: 250px;\n    background-color: #ffddd2;\n    padding: 20px;\n    position: fixed;\n    height: 100%;\n    top: 0;\n    left: 0;\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n}\n.sidebar-logo[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    margin-bottom: 30px;\n}\n.sidebar-logo img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    margin-right: 10px;\n}\n.sidebar-logo h1[data-v-f89414a0] {\n    font-size: 24px;\n    color: #333;\n    font-weight: bold;\n}\n.menu-title[data-v-f89414a0] {\n    margin-bottom: 20px;\n}\n.menu-title h2[data-v-f89414a0] {\n    font-size: 18px;\n    color: #333;\n}\n.dashboard-container[data-v-f89414a0] {\n    display: flex;\n    flex-direction: column;\n}\n.dashboard-item[data-v-f89414a0] {\n    margin: 10px 0;\n}\n.dashboard-item a[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    text-decoration: none;\n}\n.dashboard-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n    margin-right: 10px;\n}\n.dashboard-text[data-v-f89414a0] {\n    font-size: 16px;\n    color: #333;\n}\n\n/* search */\n.search-container[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    background-color: #f0f0f0;\n    margin-left: 20px;\n}\n.search-input[data-v-f89414a0] {\n    padding: 10px;\n    font-size: 16px;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    margin-right: 10px;\n    border-color: #333;\n}\n.search-icon[data-v-f89414a0] {\n    width: 24px;\n    height: 24px;\n}\n.dash-user-profile[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    position: relative;\n}\n.user-info[data-v-f89414a0] {\n    display: flex;\n    align-items: center;\n    cursor: pointer;\n}\n.user-avatar[data-v-f89414a0] {\n    width: 40px;\n    height: 40px;\n    border-radius: 50%;\n    margin-right: 10px;\n}\n.user-details[data-v-f89414a0] {\n    margin-right: 10px;\n}\n.user-name[data-v-f89414a0] {\n    font-size: 18px;\n    color: #333;\n    margin: 0;\n}\n.user-role[data-v-f89414a0] {\n    font-size: 14px;\n    color: #666;\n    margin: 0;\n}\n.dropdown-icon[data-v-f89414a0] {\n    width: 20px;\n    height: 20px;\n    cursor: pointer;\n}\n.logout-button[data-v-f89414a0] {\n    position: absolute;\n    top: 100%;\n    right: 0;\n    padding: 10px 20px;\n    background-color: #ff4d4d;\n    color: white;\n    border: none;\n    border-radius: 5px;\n    cursor: pointer;\n    display: none;\n    margin-top: 5px;\n    z-index: 1000;\n}\n.logout-button[data-v-f89414a0]:hover {\n    background-color: #ff3333;\n}\n.dash-user-profile:hover .logout-button[data-v-f89414a0] {\n    display: block;\n}\n\n/* Main Content */\n.main-content[data-v-f89414a0] {\n    margin-left: 250px;\n    padding: 20px;\n    padding-bottom: 500px;\n    background-color:#f0f0f0;\n}\n.header[data-v-f89414a0] {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 20px;\n}\n.logout-button[data-v-f89414a0] {\n    padding: 10px 20px;\n    background-color: #ff4d4d;\n    color: white;\n    border: none;\n    border-radius: 20px;\n    font-size: 14px;\n    cursor: pointer;\n}\n.logout-button.hidden[data-v-f89414a0] {\n    display: none;\n}\n\n/* Patients Section */\n.patient-overview[data-v-f89414a0] {\n    margin: 60px 0;\n    display: flex;\n    justify-content: center;\n}\n.dash-card[data-v-f89414a0] {\n    background-color: #DCC4E4;\n    padding: 25px;\n    border-radius: 15px;\n    width: 300px;\n    display: flex;\n    align-items: center;\n    gap: 20px; /* Add spacing between icon and content */\n    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */\n    transition: transform 0.2s ease; /* Smooth hover effect */\n}\n.dash-card[data-v-f89414a0]:hover {\n    transform: translateY(-3px); /* Slight lift on hover */\n}\n.dash-card img[data-v-f89414a0] {\n    width: 50px;\n    height: 50px;\n    padding: 10px;\n    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */\n    border-radius: 12px;\n}\n.dash-card-content[data-v-f89414a0] {\n    flex-grow: 1;\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n}\n.dash-card-content h2[data-v-f89414a0] {\n    font-size: 16px;\n    font-weight: 600;\n    color: #5B392C;\n    margin: 0;\n    margin-bottom: 4px;\n    text-transform: uppercase;\n    letter-spacing: 0.5px;\n}\n.dash-card-content p[data-v-f89414a0] {\n    font-size: 13px;\n    color: #666;\n    margin: 0;\n    margin-bottom: 8px;\n}\n.dash-card-content span[data-v-f89414a0] {\n    font-size: 24px;\n    font-weight: 700;\n    color: #5B392C;\n    background-color: rgba(255, 255, 255, 0.4);\n    padding: 4px 12px;\n    border-radius: 8px;\n}\n\n/* Doctors Section */\n.doctors-section[data-v-f89414a0] {\n    margin-top: 40px;\n}\n.doctors-section h2[data-v-f89414a0] {\n    margin-top: 100px;\n    font-size: 24px;\n    color: #5B392C;\n    margin-bottom: 20px;\n    margin-left: 50px;\n}\n.doctor-list[data-v-f89414a0] {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 20px;\n}\n.doctor-card[data-v-f89414a0] {\n    background-color: rgb(247, 217, 243);\n    color: rgb(0, 0, 0);\n    border: none;\n    padding: 20px;\n    font-size: 16px;\n    border-radius: 10px;\n    width: calc(50% - 10px); \n    text-align: center;\n    cursor: pointer;\n}\n.doctor-card[data-v-f89414a0]:hover {\n    background-color: #FF7F50;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -14562,7 +14665,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\r\nbody {\r\n    font-family: 'Roboto', sans-serif;\r\n    margin: 0;\r\n    padding: 0;\r\n    background-color: #ffddd2;\r\n}\r\n\r\na {\r\n    text-decoration: none;\r\n    color: inherit;\r\n}\r\n\r\nhtml {\r\n    overflow-y: scroll;\r\n}\r\n\r\n\r\n/* Topnav */\r\n.topnav {\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    padding: 20px;\r\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.logo-container {\r\n    display: flex;\r\n    align-items: center;\r\n}\r\n\r\n.logo {\r\n    height: 50px;\r\n    margin-right: 10px;\r\n    margin-left: 50px;\r\n}\r\n.sur {\r\n    width: 300px; \r\n    height: auto;\r\n}\r\n\r\n.brand-name {\r\n    font-size: 24px;\r\n    font-weight: 700;\r\n    color: #333;\r\n}\r\n\r\n.nav-links {\r\n    display: flex;\r\n    list-style: none;\r\n    gap: 10px;\r\n}\r\n\r\n.nav-links li {\r\n    margin-left: 30px;\r\n    justify-items: center;\r\n}\r\n\r\n.nav-links li a {\r\n    font-size: 18px;\r\n    color: #333;\r\n}\r\n\r\n.nav-links li a:hover,\r\n.nav-links li a.active {\r\n    color: #FA8C01;\r\n    \r\n}\r\n\r\n.profile {\r\n    display: flex;\r\n    align-items: center;\r\n}\r\n\r\n.profile-pic {\r\n    height: 40px;\r\n    border-radius: 50%;\r\n    margin-right: 10px;\r\n}\r\n/* Profile dropdown styling */\r\n.dropdown-menu {\r\n    display: none;\r\n    position: absolute;\r\n    background-color: #fff;\r\n    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);\r\n    padding: 3px;\r\n    border-radius: 10px;\r\n    margin-top: 100px;\r\n    margin-left: 60px;\r\n    z-index: 1;\r\n}\r\n\r\n.dropdown-menu a {\r\n    display: block;\r\n    padding: 10px 20px;\r\n    color: black;\r\n    text-decoration: none;\r\n}\r\n\r\n.dropdown-menu a:hover {\r\n    background-color: #f1f1f1;\r\n}\r\n\r\n/* Show the dropdown when it is active */\r\n.show {\r\n    display: block;\r\n}\r\n\r\n/* Main Section */\r\n/*Appointment card*/\r\n\r\n.main-section {\r\n    text-align: center;\r\n    padding: 50px 0px;\r\n    margin-top: 100px;\r\n    margin-bottom: 243px;\r\n\r\n}\r\n\r\n.cards-container {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: center;\r\n    gap: 60px;\r\n}\r\n\r\n\r\n.card {\r\n    background-color: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    padding: 20px;\r\n    width: 200px;\r\n    text-align: center;\r\n    transition: transform 0.3s ease; \r\n    height: 200px;\r\n    border-radius: 40px;\r\n    margin-bottom: auto;\r\n    margin-top: 50px;\r\n}\r\n\r\n.card:hover {\r\n    transform: scale(1.05); \r\n}\r\n\r\n.sur {\r\n     width: 160px; /* Set width for the circle */\r\n  height: 165px; /* Set height to match the width */\r\n  border-radius: 50%; /* Make it circular */\r\n  object-fit: cover; /* Ensure the image covers the circle */\r\n  border: 2px solid #ccc; /* Optional: add a border around the circle */\r\n}\r\n.laugo {\r\n    width: 154px;\r\n    height: 160px;\r\n}\r\n\r\n\r\n.card h3 {\r\n    margin-top: 10px;\r\n    font-size: 20px;\r\n}\r\n\r\n\r\n\r\n\r\n/* Welcome Section */\r\n.welcome-section {\r\n    padding: 60px 20px;\r\n    background-color: #FFDDD2;\r\n}\r\n\r\n/* Welcome Container: Flexbox row for larger screens */\r\n.welcome-container {\r\n    display: flex;\r\n    flex-direction: row; /* Set to row for side-by-side layout */\r\n    align-items: center;\r\n    justify-content: space-between; /* Space between image and text */\r\n    max-width: 1000px;\r\n    margin: 0 auto;\r\n    gap: 30px; /* Add space between image and text */\r\n}\r\n\r\n/* Image on the left */\r\n.welcome-image {\r\n    max-width: 100%;\r\n    height: auto;\r\n    width: 400px; /* Adjust width as needed */\r\n}\r\n\r\n/* Welcome Text on the right */\r\n.welcome-text {\r\n    max-width: 90%; /* Adjust text width */\r\n    justify-content: center;\r\n}\r\n\r\n.welcome-text h1 {\r\n    font-size: 36px;\r\n    color: #5B392C;\r\n    font-weight: bold;\r\n}\r\n\r\n.welcome-text p {\r\n    font-size: 18px;\r\n    color: #5B392C;\r\n    margin: 20px 0;\r\n}\r\n\r\n.get-started-btn {\r\n    display: inline-block;\r\n    padding: 12px 30px;\r\n    background-color: #FF7F7E;\r\n    color: #FFF;\r\n    border-radius: 25px;\r\n    text-decoration: none;\r\n    font-weight: bold;\r\n    font-size: 16px;\r\n}\r\n\r\n.admin {\r\n    display: inline-block;\r\n    padding: 12px 30px;\r\n    background-color: black;\r\n    color: #FFF;\r\n    border-radius: 25px;\r\n    text-decoration: none;\r\n    font-weight: bold;\r\n    margin-top: 5px;\r\n    font-size: 14px;\r\n}\r\n\r\n/* Guarantee Section */\r\n.guarantee-section {\r\n    margin-top: 60px;\r\n}\r\n\r\n.guarantee-section h2 {\r\n    font-size: 28px;\r\n    color: #5B392C;\r\n    margin-bottom: 40px;\r\n    font-weight: bold;\r\n    text-align: center;\r\n}\r\n\r\n\r\n\r\n\r\n/* Guarantee Cards */\r\n.guarantee-cards {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: center;\r\n    gap: 60px;\r\n}\r\n\r\n.cardG {\r\n    background-color: #FFF;\r\n    border-radius: 20px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    padding: 20px;\r\n    width: 280px;\r\n    text-align: center;\r\n    height: 220px;\r\n    width:180px;\r\n\r\n\r\n}\r\n\r\n.cardG img {\r\n    height: 100px;\r\n    width: auto;\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.cardG h3 {\r\n    font-size: 18px;\r\n    color: #5B392C;\r\n    font-weight: bold;\r\n    margin-top: 5px;\r\n}\r\n\r\n/* Responsive Design */\r\n@media (max-width: 768px) {\r\n    .welcome-container {\r\n        flex-direction: column;\r\n        text-align: center;\r\n    }\r\n\r\n    .guarantee-cards {\r\n        flex-direction: column;\r\n        align-items: center;\r\n    }\r\n\r\n    .card {\r\n        width: 90%;\r\n    }\r\n}\r\n\r\n\r\n\r\n/* Footer Styles */\r\nfooter {\r\n    background-color: #FFF1EE;\r\n    padding: 40px 0;\r\n    text-align: center;\r\n    position: sticky;\r\n}\r\n\r\n\r\n\r\n.footer-container {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    max-width: 1200px;\r\n    margin: 0 auto;\r\n    padding: 0 20px;\r\n}\r\n\r\n.footer-logo {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n}\r\n\r\n.footer-logo img {\r\n    width: 80px;\r\n}\r\n\r\n.footer-logo p {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    font-family: Abhaya Libre SemiBold;\r\n    margin-left:-20px;\r\n}\r\n\r\n.footer-center {\r\n    text-align: center;\r\n}\r\n\r\n.slogan {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n}\r\n\r\n.description {\r\n    font-size: 14px;\r\n    margin-top: 10px;\r\n    margin-bottom: 10px;\r\n    color: #777;\r\n}\r\n\r\n.footer-contact p {\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n}\r\n\r\n.footer-contact a {\r\n    color: #333;\r\n    text-decoration: none;\r\n    font-size: 14px;\r\n}\r\n\r\n.social-icons {\r\n    display: flex;\r\n    gap: 20px;\r\n    margin-top: 10px;\r\n    margin-left: 22px;\r\n\r\n}\r\n\r\n\r\n\r\nfooter p {\r\n    margin: 5px 0;\r\n}\r\n\r\n/* Gallery Section */\r\n.gallery-section {\r\n    padding: 60px 20px;\r\n        background-color: #ffddd2;\r\n}\r\n\r\n.gallery-section h1 {\r\n    font-size: 36px;\r\n    color: #5B392C;\r\n    margin-bottom: 40px;\r\n    margin-top: 9px;\r\n    margin-left: 50px;\r\n\r\n}\r\n\r\n/* Gallery Container */\r\n.gallery-container {\r\n    display: grid; \r\n    grid-template-columns: repeat(4, 1fr);\r\n    gap: 30px; \r\n    max-width: 1100px; \r\n    margin-left: auto;\r\n    margin-right: auto;\r\n    column-gap: 0%;\r\n\r\n}\r\n\r\n/* Gallery Cards */\r\n.gallery-card {\r\n    background-color: #FFF;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    padding: 20px;\r\n    text-align: center;\r\n    cursor: pointer;\r\n    border-radius: 10px;\r\n    width: 210px;\r\n\r\n}\r\n\r\n.gallery-card:hover {\r\n    transform: scale(1.05); \r\n}\r\n\r\n\r\n.gallery-card img {\r\n    width: 210px;  \r\n    height: 200px;\r\n     object-fit: cover; \r\n    object-position: center; \r\n    border-radius: 10px;\r\n\r\n\r\n}\r\n\r\n\r\n.gallery-card p {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    color: #5B392C;\r\n}\r\n\r\n.gallery-card span {\r\n    font-size: 14px;\r\n    color: #777;\r\n}\r\n\r\n\r\n\r\n/* Modal Styles */\r\n.galler-modal {\r\n    display: none; /* Hidden by default */\r\n    position: fixed; /* Stay in place */\r\n    z-index: 100; /* Sit on top */\r\n    padding-top: 100px; /* Location of the box */\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    overflow: auto; /* Enable scroll if needed */\r\n    background-color: rgba(0, 0, 0, 0.6); /* Black with opacity */\r\n}\r\n\r\n.galler-modal-content {\r\n    background-color: #fefefe;\r\n    margin: auto;\r\n    padding: 20px;\r\n    border: 1px solid #888;\r\n    width: 60%;\r\n    border-radius: 20px;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-around;\r\n    max-width: 1200px;\r\n    width: 500px;\r\n}\r\n\r\n.galler-modal-image img {\r\n    width: 250px;\r\n    height: auto;\r\n    border-radius: 20px;\r\n    margin: auto;\r\n}\r\n\r\n.galler-modal-text {\r\n    text-align: left;\r\n    margin-left: 20px;\r\n}\r\n\r\n.galler-modal-text h2 {\r\n    font-size: 28px;\r\n    color: #5B392C;\r\n}\r\n\r\n.galler-modal-text p {\r\n    font-size: 18px;\r\n    color: #777;\r\n}\r\n\r\n.galler-modal-text h4 {\r\n    font-size: 18px;\r\n    color: #777;\r\n}\r\n\r\n.galler-close-btn {\r\n    position: absolute;\r\n    top: 10px;\r\n    right: 20px;\r\n    font-size: 30px;\r\n    font-weight: bold;\r\n    cursor: pointer;\r\n    color: #333;\r\n}\r\n\r\n.galler-close-btn:hover {\r\n    color: red;\r\n}\r\n\r\n/* About Section */\r\n.about-section {\r\n    text-align: center;\r\n    padding: 60px 20px;\r\n    background-color: #ffddd2;\r\n    margin-bottom: 50px;\r\n}\r\n.about-container {\r\n    background-color: white;\r\n    padding: 40px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); \r\n    border-radius: 15px;\r\n    max-width: 800px;\r\n    margin: 0 auto; \r\n}\r\n\r\n\r\n.about-section h1 {\r\n    font-size: 36px;\r\n    color: #5B392C;\r\n    font-weight: bold;\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.about-section p {\r\n    font-size: 18px;\r\n    color: #5B392C;\r\n    max-width: 800px;\r\n    margin: 0 auto 20px;\r\n    line-height: 1.6;\r\n}\r\n.user-profile {\r\n    background-color: #e89c8c;\r\n    padding: 5px 10px;\r\n    border-radius: 20px;\r\n    color: #fff;\r\n}\r\n\r\n.form-container {\r\n    background: white;\r\n    padding: 30px;\r\n    margin: 20px;\r\n    border-radius: 10px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\r\n    width: 600px; \r\n    text-align: center;\r\n    justify-items: center;\r\n    margin-left: auto;\r\n    margin-right: auto;\r\n    margin-top: 148px;\r\n    margin-bottom: 160px;\r\n}\r\n\r\nh2 {\r\n    margin-bottom: 20px;\r\n    color: #333;\r\n}\r\n\r\n.form-content {\r\n    display: flex;\r\n    gap: 50px; \r\n}\r\n\r\n.form-column {\r\n    flex: 1;\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 15px; /* Space between form fields */\r\n}\r\n\r\n.form-group {\r\n    text-align: left;\r\n}\r\n\r\n.form-group label {\r\n    display: block;\r\n    margin-bottom: 5px;\r\n    color: #666;\r\n}\r\n\r\n.form-group input,\r\n.form-group select {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border: 1px solid #ddd;\r\n    border-radius: 5px;\r\n    box-sizing: border-box;\r\n}\r\n\r\n.form-buttons {\r\n    display: flex;\r\n    gap: 15px;\r\n    margin-top: 20px;\r\n    margin-left: 100px;\r\n}\r\n\r\n.form-buttons button {\r\n    background-color: #f09792;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    color: white;\r\n    border-radius: 20px;\r\n    cursor: pointer;\r\n}\r\n\r\n.form-buttons button:hover {\r\n    background-color: #e07a76;\r\n}\r\n\r\nbutton[type=\"button\"] {\r\n    background-color: #ddd;\r\n    color: #333;\r\n}\r\n\r\nbutton[type=\"button\"]:hover {\r\n    background-color: #bbb}\r\n.logcontainer {\r\n    position: relative;\r\n    width: 100%;\r\n    max-width: 1024px;\r\n    height: 100%;\r\n}\r\n\r\n.back-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    left: 20px;\r\n    font-size: 24px;\r\n    background: none;\r\n    border: none;\r\n    cursor: pointer;\r\n}\r\n\r\n.admin-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    right: 20px;\r\n    background-color: black;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    cursor: pointer;\r\n    border-radius: 15px;\r\n}\r\n\r\n/* Login box styling */\r\n.login-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 300px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 400px;\r\n}\r\n\r\n.login-box h2{\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.input-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\nlabel {\r\n    display: block;\r\n    font-size: 14px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\ninput {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border-radius: 5px;\r\n    border: 1px solid #ccc;\r\n    font-size: 16px;\r\n}\r\n\r\n.sign-in-btn {\r\n    width: 40%;\r\n    background-color: black;\r\n    color: white;\r\n    padding: 15px;\r\n    border-radius: 25px;\r\n    border: none;\r\n    cursor: pointer;\r\n    margin-top: 20px;\r\n}\r\n\r\n.signup-link {\r\n    color: red;\r\n    text-decoration: none;\r\n\r\n}\r\n\r\n\r\n/*admin*/\r\n\r\n.admincontainer {\r\n    position: relative;\r\n    width: 100%;\r\n    max-width: 1024px;\r\n    height: 100%;\r\n}\r\n\r\n.back-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    left: 20px;\r\n    font-size: 24px;\r\n    background: none;\r\n    border: none;\r\n    cursor: pointer;\r\n}\r\n\r\n.admin-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    right: 20px;\r\n    background-color: black;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    cursor: pointer;\r\n    border-radius: 15px;\r\n}\r\n\r\n/* Login box styling */\r\n.admin-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 290px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 300px;\r\n}\r\n\r\n.admin-box h2{\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.admin-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\nlabel {\r\n    display: block;\r\n    font-size: 14px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\ninput {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border-radius: 5px;\r\n    border: 1px solid #ccc;\r\n    font-size: 16px;\r\n}\r\n\r\n.admin-btn {\r\n    width: 40%;\r\n    background-color: black;\r\n    color: white;\r\n    padding: 15px;\r\n    border-radius: 25px;\r\n    border: none;\r\n    cursor: pointer;\r\n    margin-top: 20px;\r\n}\r\n\r\n.admin-link {\r\n    color: red;\r\n    text-decoration: none;\r\n    \r\n}\r\n\r\n/* Profile Picture Section */\r\n.profile-picture-container {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    margin-bottom: 20px;\r\n    margin-top: 1px;\r\n}\r\n\r\n.profile-picture {\r\n    width: 50px;\r\n    height: 50px;\r\n    object-fit: cover;\r\n    border-radius: 50%;\r\n    margin-bottom: 10px;\r\n    border: 2px solid #ccc;\r\n}\r\n\r\n#profile-picture-input {\r\n    font-size: 14px;\r\n}\r\n\r\n/*edit account*/\r\n\r\n.acc-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 300px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 400px;\r\n    padding-bottom: 100px;\r\n}\r\n\r\n.acc-box h2{\r\n    margin-bottom: 10px;\r\n}\r\n\r\n.acc-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\n/* sign up */\r\n.signup-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 300px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 400px;\r\n    padding-bottom: 350px;\r\n    gap: 50px;\r\n}\r\n\r\n.signup-box h2{\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.signup-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\nlabel {\r\n    display: block;\r\n    font-size: 14px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\ninput {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border-radius: 5px;\r\n    border: 1px solid #ccc;\r\n    font-size: 16px;\r\n    \r\n}\r\n\r\n.signup-btn {\r\n    width: 40%;\r\n    background-color: black;\r\n    color: white;\r\n    padding: 15px;\r\n    border-radius: 25px;\r\n    border: none;\r\n    cursor: pointer;\r\n    margin-top: 20px;\r\n}\r\n\r\n.signup-link {\r\n    color: red;\r\n    text-decoration: none;\r\n\r\n}\r\n\r\n.signup-gif {\r\n    width: 300px; /* Adjust as needed */\r\n    height: auto; /* Maintain aspect ratio */\r\n    /* Optional styles for better alignment */\r\n    border-radius: 10px; /* Optional for rounded corners */\r\n    display: flex;\r\n    justify-content: center;\r\n    \r\n}\r\n\r\n.gifcontainer {\r\n    display: flex;\r\n    flex-direction: column; /* Stack the buttons and form vertically */\r\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\r\n    font-family: 'Roboto', sans-serif;\r\n    margin: 0;\r\n    padding: 0;\r\n    background-color: #ffddd2;\r\n    min-height: 100vh;\r\n    width: 100%;\r\n    overflow-x: hidden;\r\n}\r\n\r\na {\r\n    text-decoration: none;\r\n    color: inherit;\r\n}\r\n\r\nhtml {\r\n    overflow-y: scroll;\r\n}\r\n\r\n\r\n/* Topnav */\r\n.topnav {\r\n    background-color: white;\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    padding: 10px 20px;\r\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\r\n    position: relative;\r\n    width: 100%;\r\n    box-sizing: border-box;\r\n}\r\n\r\n.logo-container {\r\n    display: flex;\r\n    align-items: center;\r\n    flex-shrink: 0;\r\n}\r\n\r\n.logo {\r\n    height: 50px;\r\n    width: auto;\r\n    margin-right: 10px;\r\n    margin-left: 20px;\r\n}\r\n\r\n.sur {\r\n    width: 300px; \r\n    height: auto;\r\n}\r\n\r\n.brand-name {\r\n    font-size: 24px;\r\n    font-weight: 700;\r\n    color: #333;\r\n}\r\n\r\n.nav-links {\r\n    display: flex;\r\n    list-style: none;\r\n    margin: 0;\r\n    padding: 0;\r\n    gap: 20px;\r\n    flex-wrap: nowrap;\r\n}\r\n\r\n.nav-links li {\r\n    margin: 0;\r\n    white-space: nowrap;\r\n}\r\n\r\n.nav-links li a {\r\n    font-size: 18px;\r\n    color: #333;\r\n}\r\n\r\n.nav-links li a:hover,\r\n.nav-links li a.active {\r\n    color: #FA8C01;\r\n    \r\n}\r\n\r\n.profile {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n    flex-shrink: 0;\r\n    position: relative;\r\n}\r\n\r\n.profile-pic {\r\n    height: 40px;\r\n    border-radius: 50%;\r\n    margin-right: 10px;\r\n}\r\n/* Profile dropdown styling */\r\n.dropdown-menu {\r\n    display: none;\r\n    position: absolute;\r\n    background-color: #fff;\r\n    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);\r\n    padding: 3px;\r\n    border-radius: 10px;\r\n    right: 20px;\r\n    top: 100%;\r\n    z-index: 1000;\r\n    min-width: 150px;\r\n}\r\n\r\n.dropdown-menu a {\r\n    display: block;\r\n    padding: 10px 20px;\r\n    color: black;\r\n    text-decoration: none;\r\n    text-align: left;\r\n}\r\n\r\n.dropdown-menu a:hover {\r\n    background-color: #f1f1f1;\r\n    border-radius: 8px;\r\n}\r\n\r\n/* Show the dropdown when it is active */\r\n.show {\r\n    display: block;\r\n}\r\n\r\n/* Main Section */\r\n/*Appointment card*/\r\n\r\n.main-section {\r\n    text-align: center;\r\n    padding: 50px 0px;\r\n    margin-top: 100px;\r\n    margin-bottom: 243px;\r\n\r\n}\r\n\r\n.cards-container {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: center;\r\n    gap: 60px;\r\n}\r\n\r\n\r\n.card {\r\n    background-color: white;\r\n    border-radius: 12px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    padding: 20px;\r\n    width: 200px;\r\n    text-align: center;\r\n    transition: transform 0.3s ease; \r\n    height: 200px;\r\n    border-radius: 40px;\r\n    margin-bottom: auto;\r\n    margin-top: 50px;\r\n}\r\n\r\n.card:hover {\r\n    transform: scale(1.05); \r\n}\r\n\r\n.sur {\r\n     width: 160px; /* Set width for the circle */\r\n  height: 165px; /* Set height to match the width */\r\n  border-radius: 50%; /* Make it circular */\r\n  object-fit: cover; /* Ensure the image covers the circle */\r\n  border: 2px solid #ccc; /* Optional: add a border around the circle */\r\n}\r\n.laugo {\r\n    width: 154px;\r\n    height: 160px;\r\n}\r\n\r\n\r\n.card h3 {\r\n    margin-top: 10px;\r\n    font-size: 20px;\r\n}\r\n\r\n\r\n\r\n\r\n/* Welcome Section */\r\n.welcome-section {\r\n    padding: 60px 20px;\r\n    background-color: #FFDDD2;\r\n}\r\n\r\n/* Welcome Container: Flexbox row for larger screens */\r\n.welcome-container {\r\n    display: flex;\r\n    flex-direction: row; /* Set to row for side-by-side layout */\r\n    align-items: center;\r\n    justify-content: space-between; /* Space between image and text */\r\n    max-width: 1000px;\r\n    margin: 0 auto;\r\n    gap: 30px; /* Add space between image and text */\r\n    width: 90%;\r\n    max-width: 1200px;\r\n    padding: 2rem 5%;\r\n    margin: 0 auto;\r\n}\r\n\r\n/* Image on the left */\r\n.welcome-image {\r\n    max-width: 100%;\r\n    height: auto;\r\n    width: 400px; /* Adjust width as needed */\r\n    object-fit: contain;\r\n}\r\n\r\n/* Welcome Text on the right */\r\n.welcome-text {\r\n    max-width: 90%; /* Adjust text width */\r\n    justify-content: center;\r\n}\r\n\r\n.welcome-text h1 {\r\n    font-size: 36px;\r\n    color: #5B392C;\r\n    font-weight: bold;\r\n}\r\n\r\n.welcome-text p {\r\n    font-size: 18px;\r\n    color: #5B392C;\r\n    margin: 20px 0;\r\n}\r\n\r\n.get-started-btn {\r\n    display: inline-block;\r\n    padding: 12px 30px;\r\n    background-color: #FF7F7E;\r\n    color: #FFF;\r\n    border-radius: 25px;\r\n    text-decoration: none;\r\n    font-weight: bold;\r\n    font-size: 16px;\r\n}\r\n\r\n.admin {\r\n    display: inline-block;\r\n    padding: 12px 30px;\r\n    background-color: black;\r\n    color: #FFF;\r\n    border-radius: 25px;\r\n    text-decoration: none;\r\n    font-weight: bold;\r\n    margin-top: 5px;\r\n    font-size: 14px;\r\n}\r\n\r\n/* Guarantee Section */\r\n.guarantee-section {\r\n    margin-top: 60px;\r\n}\r\n\r\n.guarantee-section h2 {\r\n    font-size: 28px;\r\n    color: #5B392C;\r\n    margin-bottom: 40px;\r\n    font-weight: bold;\r\n    text-align: center;\r\n}\r\n\r\n\r\n\r\n\r\n/* Guarantee Cards */\r\n.guarantee-cards {\r\n    width: 90%;\r\n    max-width: 1200px;\r\n    margin: 0 auto;\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: center;\r\n    gap: 30px;\r\n}\r\n\r\n.cardG {\r\n    background-color: #FFF;\r\n    border-radius: 20px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    padding: 20px;\r\n    width: 280px;\r\n    text-align: center;\r\n    height: 220px;\r\n    width:180px;\r\n    flex: 1;\r\n    min-width: 160px;\r\n    max-width: 180px;\r\n\r\n\r\n}\r\n\r\n.cardG img {\r\n    height: 100px;\r\n    width: auto;\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.cardG h3 {\r\n    font-size: 18px;\r\n    color: #5B392C;\r\n    font-weight: bold;\r\n    margin-top: 5px;\r\n}\r\n\r\n/* Responsive Design */\r\n@media (max-width: 768px) {\r\n    .welcome-container {\r\n        flex-direction: column;\r\n        text-align: center;\r\n    }\r\n\r\n    .guarantee-cards {\r\n        flex-direction: column;\r\n        align-items: center;\r\n    }\r\n\r\n    .card {\r\n        width: 90%;\r\n    }\r\n}\r\n\r\n\r\n\r\n/* Footer Styles */\r\nfooter {\r\n    background-color: #FFF1EE;\r\n    padding: 40px 0;\r\n    text-align: center;\r\n    position: sticky;\r\n}\r\n\r\n\r\n\r\n.footer-container {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    max-width: 1200px;\r\n    margin: 0 auto;\r\n    padding: 0 20px;\r\n    width: 90%;\r\n    max-width: 1200px;\r\n    padding: 3rem 5%;\r\n    margin: 0 auto;\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: space-between;\r\n}\r\n\r\n.footer-logo {\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n}\r\n\r\n.footer-logo img {\r\n    width: 80px;\r\n}\r\n\r\n.footer-logo p {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    font-family: Abhaya Libre SemiBold;\r\n    margin-left:-20px;\r\n}\r\n\r\n.footer-center {\r\n    text-align: center;\r\n}\r\n\r\n.slogan {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n}\r\n\r\n.description {\r\n    font-size: 14px;\r\n    margin-top: 10px;\r\n    margin-bottom: 10px;\r\n    color: #777;\r\n}\r\n\r\n.footer-contact p {\r\n    font-size: 16px;\r\n    font-weight: bold;\r\n}\r\n\r\n.footer-contact a {\r\n    color: #333;\r\n    text-decoration: none;\r\n    font-size: 14px;\r\n}\r\n\r\n.social-icons {\r\n    display: flex;\r\n    gap: 20px;\r\n    margin-top: 10px;\r\n    margin-left: 22px;\r\n\r\n}\r\n\r\n\r\n\r\nfooter p {\r\n    margin: 5px 0;\r\n}\r\n\r\n/* Gallery Section */\r\n.gallery-section {\r\n    padding: 60px 20px;\r\n        background-color: #ffddd2;\r\n}\r\n\r\n.gallery-section h1 {\r\n    font-size: 36px;\r\n    color: #5B392C;\r\n    margin-bottom: 40px;\r\n    margin-top: 9px;\r\n    margin-left: 50px;\r\n\r\n}\r\n\r\n/* Gallery Container */\r\n.gallery-container {\r\n    display: grid; \r\n    grid-template-columns: repeat(4, 1fr);\r\n    gap: 30px; \r\n    max-width: 1100px; \r\n    margin-left: auto;\r\n    margin-right: auto;\r\n    column-gap: 0%;\r\n    width: 90%;\r\n    max-width: 1200px;\r\n    display: grid;\r\n    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\r\n    gap: 20px;\r\n    padding: 0 5%;\r\n\r\n}\r\n\r\n/* Gallery Cards */\r\n.gallery-card {\r\n    background-color: #FFF;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\r\n    padding: 20px;\r\n    text-align: center;\r\n    cursor: pointer;\r\n    border-radius: 10px;\r\n    width: 210px;\r\n    width: 100%;\r\n    max-width: 210px;\r\n    margin: 0 auto;\r\n\r\n}\r\n\r\n.gallery-card:hover {\r\n    transform: scale(1.05); \r\n}\r\n\r\n\r\n.gallery-card img {\r\n    width: 210px;  \r\n    height: 200px;\r\n     object-fit: cover; \r\n    object-position: center; \r\n    border-radius: 10px;\r\n    width: 100%;\r\n    height: 200px;\r\n    object-fit: cover;\r\n\r\n\r\n}\r\n\r\n\r\n.gallery-card p {\r\n    font-size: 18px;\r\n    font-weight: bold;\r\n    color: #5B392C;\r\n}\r\n\r\n.gallery-card span {\r\n    font-size: 14px;\r\n    color: #777;\r\n}\r\n\r\n\r\n\r\n/* Modal Styles */\r\n.galler-modal {\r\n    display: none; /* Hidden by default */\r\n    position: fixed; /* Stay in place */\r\n    z-index: 100; /* Sit on top */\r\n    padding-top: 100px; /* Location of the box */\r\n    left: 0;\r\n    top: 0;\r\n    width: 100%;\r\n    height: 100%;\r\n    overflow: auto; /* Enable scroll if needed */\r\n    background-color: rgba(0, 0, 0, 0.6); /* Black with opacity */\r\n}\r\n\r\n.galler-modal-content {\r\n    background-color: #fefefe;\r\n    margin: auto;\r\n    padding: 20px;\r\n    border: 1px solid #888;\r\n    width: 60%;\r\n    border-radius: 20px;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-around;\r\n    max-width: 1200px;\r\n    width: 500px;\r\n}\r\n\r\n.galler-modal-image img {\r\n    width: 250px;\r\n    height: auto;\r\n    border-radius: 20px;\r\n    margin: auto;\r\n}\r\n\r\n.galler-modal-text {\r\n    text-align: left;\r\n    margin-left: 20px;\r\n}\r\n\r\n.galler-modal-text h2 {\r\n    font-size: 28px;\r\n    color: #5B392C;\r\n}\r\n\r\n.galler-modal-text p {\r\n    font-size: 18px;\r\n    color: #777;\r\n}\r\n\r\n.galler-modal-text h4 {\r\n    font-size: 18px;\r\n    color: #777;\r\n}\r\n\r\n.galler-close-btn {\r\n    position: absolute;\r\n    top: 10px;\r\n    right: 20px;\r\n    font-size: 30px;\r\n    font-weight: bold;\r\n    cursor: pointer;\r\n    color: #333;\r\n}\r\n\r\n.galler-close-btn:hover {\r\n    color: red;\r\n}\r\n\r\n/* About Section */\r\n.about-section {\r\n    text-align: center;\r\n    padding: 60px 20px;\r\n    background-color: #ffddd2;\r\n    margin-bottom: 50px;\r\n}\r\n.about-container {\r\n    background-color: white;\r\n    padding: 40px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); \r\n    border-radius: 15px;\r\n    max-width: 800px;\r\n    margin: 0 auto; \r\n}\r\n\r\n\r\n.about-section h1 {\r\n    font-size: 36px;\r\n    color: #5B392C;\r\n    font-weight: bold;\r\n    margin-bottom: 20px;\r\n}\r\n\r\n.about-section p {\r\n    font-size: 18px;\r\n    color: #5B392C;\r\n    max-width: 800px;\r\n    margin: 0 auto 20px;\r\n    line-height: 1.6;\r\n}\r\n.user-profile {\r\n    background-color: #e89c8c;\r\n    padding: 5px 10px;\r\n    border-radius: 20px;\r\n    color: #fff;\r\n}\r\n\r\n.form-container {\r\n    background: white;\r\n    padding: 30px;\r\n    margin: 20px;\r\n    border-radius: 10px;\r\n    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);\r\n    width: 600px; \r\n    text-align: center;\r\n    justify-items: center;\r\n    margin-left: auto;\r\n    margin-right: auto;\r\n    margin-top: 148px;\r\n    margin-bottom: 160px;\r\n    width: 90%;\r\n    max-width: 600px;\r\n    margin: 148px auto 160px;\r\n    padding: 30px 5%;\r\n}\r\n\r\nh2 {\r\n    margin-bottom: 20px;\r\n    color: #333;\r\n}\r\n\r\n.form-content {\r\n    display: flex;\r\n    gap: 50px; \r\n}\r\n\r\n.form-column {\r\n    flex: 1;\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 15px; /* Space between form fields */\r\n}\r\n\r\n.form-group {\r\n    text-align: left;\r\n}\r\n\r\n.form-group label {\r\n    display: block;\r\n    margin-bottom: 5px;\r\n    color: #666;\r\n}\r\n\r\n.form-group input,\r\n.form-group select {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border: 1px solid #ddd;\r\n    border-radius: 5px;\r\n    box-sizing: border-box;\r\n}\r\n\r\n.form-buttons {\r\n    display: flex;\r\n    gap: 15px;\r\n    margin-top: 20px;\r\n    margin-left: 100px;\r\n}\r\n\r\n.form-buttons button {\r\n    background-color: #f09792;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    color: white;\r\n    border-radius: 20px;\r\n    cursor: pointer;\r\n}\r\n\r\n.form-buttons button:hover {\r\n    background-color: #e07a76;\r\n}\r\n\r\nbutton[type=\"button\"] {\r\n    background-color: #ddd;\r\n    color: #333;\r\n}\r\n\r\nbutton[type=\"button\"]:hover {\r\n    background-color: #bbb}\r\n.logcontainer {\r\n    position: relative;\r\n    width: 100%;\r\n    max-width: 1024px;\r\n    height: 100%;\r\n}\r\n\r\n.back-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    left: 20px;\r\n    font-size: 24px;\r\n    background: none;\r\n    border: none;\r\n    cursor: pointer;\r\n}\r\n\r\n.admin-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    right: 20px;\r\n    background-color: black;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    cursor: pointer;\r\n    border-radius: 15px;\r\n}\r\n\r\n/* Login box styling */\r\n.login-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 300px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 400px;\r\n    width: 90%;\r\n    max-width: 300px;\r\n    margin: 100px auto;\r\n    padding: 40px 5%;\r\n}\r\n\r\n.login-box h2{\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.input-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\nlabel {\r\n    display: block;\r\n    font-size: 14px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\ninput {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border-radius: 5px;\r\n    border: 1px solid #ccc;\r\n    font-size: 16px;\r\n}\r\n\r\n.sign-in-btn {\r\n    width: 40%;\r\n    background-color: black;\r\n    color: white;\r\n    padding: 15px;\r\n    border-radius: 25px;\r\n    border: none;\r\n    cursor: pointer;\r\n    margin-top: 20px;\r\n}\r\n\r\n.signup-link {\r\n    color: red;\r\n    text-decoration: none;\r\n\r\n}\r\n\r\n\r\n/*admin*/\r\n\r\n.admincontainer {\r\n    position: relative;\r\n    width: 100%;\r\n    max-width: 1024px;\r\n    height: 100%;\r\n}\r\n\r\n.back-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    left: 20px;\r\n    font-size: 24px;\r\n    background: none;\r\n    border: none;\r\n    cursor: pointer;\r\n}\r\n\r\n.admin-button {\r\n    position: absolute;\r\n    top: 20px;\r\n    right: 20px;\r\n    background-color: black;\r\n    color: white;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    cursor: pointer;\r\n    border-radius: 15px;\r\n}\r\n\r\n/* Login box styling */\r\n.admin-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 290px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 300px;\r\n    width: 90%;\r\n    max-width: 300px;\r\n    margin: 100px auto;\r\n    padding: 40px 5%;\r\n}\r\n\r\n.admin-box h2{\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.admin-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\nlabel {\r\n    display: block;\r\n    font-size: 14px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\ninput {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border-radius: 5px;\r\n    border: 1px solid #ccc;\r\n    font-size: 16px;\r\n}\r\n\r\n.admin-btn {\r\n    width: 40%;\r\n    background-color: black;\r\n    color: white;\r\n    padding: 15px;\r\n    border-radius: 25px;\r\n    border: none;\r\n    cursor: pointer;\r\n    margin-top: 20px;\r\n}\r\n\r\n.admin-link {\r\n    color: red;\r\n    text-decoration: none;\r\n    \r\n}\r\n\r\n/* Profile Picture Section */\r\n.profile-picture-container {\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    margin-bottom: 20px;\r\n    margin-top: 1px;\r\n}\r\n\r\n.profile-picture {\r\n    width: 50px;\r\n    height: 50px;\r\n    object-fit: cover;\r\n    border-radius: 50%;\r\n    margin-bottom: 10px;\r\n    border: 2px solid #ccc;\r\n}\r\n\r\n#profile-picture-input {\r\n    font-size: 14px;\r\n}\r\n\r\n/*edit account*/\r\n\r\n.acc-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 300px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 400px;\r\n    padding-bottom: 100px;\r\n    width: 90%;\r\n    max-width: 300px;\r\n    margin: 100px auto;\r\n    padding: 40px 5%;\r\n}\r\n\r\n.acc-box h2{\r\n    margin-bottom: 10px;\r\n}\r\n\r\n.acc-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\n/* sign up */\r\n.signup-box {\r\n    background-color: white;\r\n    padding: 40px;\r\n    border-radius: 15px;\r\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\r\n    width: 300px;\r\n    margin: auto;\r\n    text-align: center;\r\n    margin-top: 100px;\r\n    margin-bottom: auto;\r\n    height: 400px;\r\n    padding-bottom: 350px;\r\n    gap: 50px;\r\n    width: 90%;\r\n    max-width: 300px;\r\n    margin: 100px auto;\r\n    padding: 40px 5%;\r\n}\r\n\r\n.signup-box h2{\r\n    margin-bottom: 40px;\r\n}\r\n\r\n.signup-group {\r\n    margin-bottom: 15px;\r\n    text-align: left;\r\n    margin-left: 5px;\r\n    margin-right: 20px;\r\n}\r\n\r\nlabel {\r\n    display: block;\r\n    font-size: 14px;\r\n    margin-bottom: 5px;\r\n}\r\n\r\ninput {\r\n    width: 100%;\r\n    padding: 10px;\r\n    border-radius: 5px;\r\n    border: 1px solid #ccc;\r\n    font-size: 16px;\r\n    \r\n}\r\n\r\n.signup-btn {\r\n    width: 40%;\r\n    background-color: black;\r\n    color: white;\r\n    padding: 15px;\r\n    border-radius: 25px;\r\n    border: none;\r\n    cursor: pointer;\r\n    margin-top: 20px;\r\n}\r\n\r\n.signup-link {\r\n    color: red;\r\n    text-decoration: none;\r\n\r\n}\r\n\r\n.signup-gif {\r\n    width: 300px; /* Adjust as needed */\r\n    height: auto; /* Maintain aspect ratio */\r\n    /* Optional styles for better alignment */\r\n    border-radius: 10px; /* Optional for rounded corners */\r\n    display: flex;\r\n    justify-content: center;\r\n    \r\n}\r\n\r\n.gifcontainer {\r\n    display: flex;\r\n    flex-direction: column; /* Stack the buttons and form vertically */\r\n}\r\n\r\n/* Responsive Navigation */\r\n@media screen and (max-width: 768px) {\r\n    .topnav {\r\n        flex-direction: column;\r\n        padding: 10px;\r\n    }\r\n\r\n    .logo-container {\r\n        margin-bottom: 10px;\r\n    }\r\n\r\n    .logo {\r\n        margin-left: 0;\r\n    }\r\n\r\n    .nav-links {\r\n        flex-direction: column;\r\n        align-items: center;\r\n        width: 100%;\r\n        gap: 10px;\r\n    }\r\n\r\n    .nav-links li {\r\n        margin: 5px 0;\r\n    }\r\n\r\n    .profile {\r\n        width: 100%;\r\n        justify-content: center;\r\n    }\r\n\r\n    .dropdown-menu {\r\n        right: 50%;\r\n        transform: translateX(50%);\r\n        top: 100%;\r\n        width: 200px;\r\n        margin-top: 10px;\r\n    }\r\n}\r\n\r\n/* Responsive Welcome Section */\r\n@media screen and (max-width: 992px) {\r\n  .welcome-container {\r\n    flex-direction: column;\r\n    text-align: center;\r\n    padding: 2rem;\r\n  }\r\n\r\n  .welcome-image {\r\n    max-width: 80%;\r\n    margin-bottom: 2rem;\r\n  }\r\n\r\n  .welcome-text {\r\n    width: 100%;\r\n    padding: 0;\r\n  }\r\n\r\n  .guarantee-cards {\r\n    flex-direction: column;\r\n    align-items: center;\r\n  }\r\n\r\n  .cardG {\r\n    width: 80%;\r\n    margin: 1rem 0;\r\n  }\r\n}\r\n\r\n/* Responsive Footer */\r\n@media screen and (max-width: 768px) {\r\n  .footer-container {\r\n    flex-direction: column;\r\n    text-align: center;\r\n    padding: 2rem;\r\n  }\r\n\r\n  .footer-logo, .footer-center, .footer-contact {\r\n    width: 100%;\r\n    margin: 1rem 0;\r\n  }\r\n\r\n  .footer-center .description br {\r\n    display: none;\r\n  }\r\n}\r\n\r\n/* Base styles adjustments */\r\n.welcome-container {\r\n  display: flex;\r\n  align-items: center;\r\n  max-width: 1200px;\r\n  margin: 0 auto;\r\n  padding: 2rem;\r\n}\r\n\r\n.welcome-image {\r\n  max-width: 50%;\r\n  height: auto;\r\n}\r\n\r\n.guarantee-cards {\r\n  display: flex;\r\n  justify-content: space-around;\r\n  flex-wrap: wrap;\r\n  gap: 2rem;\r\n  padding: 2rem;\r\n}\r\n\r\n.cardG {\r\n  flex: 1;\r\n  min-width: 250px;\r\n  max-width: 350px;\r\n}\r\n\r\n.footer-container {\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: flex-start;\r\n  max-width: 1200px;\r\n  margin: 0 auto;\r\n  padding: 3rem 2rem;\r\n}\r\n\r\n/* Enhanced responsive breakpoints */\r\n@media screen and (max-width: 1024px) {\r\n    .gallery-container {\r\n        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));\r\n    }\r\n}\r\n\r\n@media screen and (max-width: 768px) {\r\n    .topnav {\r\n        padding: 10px 3%;\r\n    }\r\n\r\n    .logo {\r\n        margin-left: 10px;\r\n    }\r\n\r\n    .welcome-container {\r\n        padding: 1rem 3%;\r\n    }\r\n\r\n    .form-content {\r\n        flex-direction: column;\r\n        gap: 20px;\r\n    }\r\n\r\n    .form-buttons {\r\n        margin-left: 0;\r\n        justify-content: center;\r\n    }\r\n\r\n    .footer-container {\r\n        padding: 2rem 3%;\r\n    }\r\n\r\n    .footer-logo, \r\n    .footer-center, \r\n    .footer-contact {\r\n        width: 100%;\r\n        text-align: center;\r\n        margin: 1rem 0;\r\n    }\r\n\r\n    .social-icons {\r\n        justify-content: center;\r\n        margin-left: 0;\r\n    }\r\n}\r\n\r\n@media screen and (max-width: 480px) {\r\n    .gallery-container {\r\n        grid-template-columns: 1fr;\r\n    }\r\n\r\n    .gallery-card {\r\n        max-width: 100%;\r\n    }\r\n\r\n    .welcome-text h1 {\r\n        font-size: 28px;\r\n    }\r\n\r\n    .welcome-text p {\r\n        font-size: 16px;\r\n    }\r\n}\r\n\r\n/* Fix for login and signup boxes */\r\n.login-box,\r\n.signup-box,\r\n.admin-box,\r\n.acc-box {\r\n    width: 90%;\r\n    max-width: 300px;\r\n    margin: 100px auto;\r\n    padding: 40px 5%;\r\n}\r\n\r\n/* Guarantee cards adjustment */\r\n.guarantee-cards {\r\n    width: 90%;\r\n    max-width: 1200px;\r\n    margin: 0 auto;\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n    justify-content: center;\r\n    gap: 30px;\r\n}\r\n\r\n.cardG {\r\n    flex: 1;\r\n    min-width: 160px;\r\n    max-width: 180px;\r\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39969,7 +40072,10 @@ var render = function () {
                 [
                   _c("img", {
                     staticClass: "sur",
-                    attrs: { src: clinic.logo, alt: clinic.name + " Logo" },
+                    attrs: {
+                      src: _vm.getLogoUrl(clinic.logo),
+                      alt: clinic.name + " Logo",
+                    },
                   }),
                   _vm._v(" "),
                   _c("h3", [_vm._v(_vm._s(clinic.name))]),
@@ -42896,7 +43002,46 @@ var render = function () {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "main-content" }, [
-      _vm._m(2),
+      _c("header", { staticClass: "header" }, [
+        _vm._m(2),
+        _vm._v(" "),
+        _c("section", { staticClass: "dash-user-profile" }, [
+          _c(
+            "div",
+            { staticClass: "user-info", on: { click: _vm.toggleLogout } },
+            [
+              _c("img", {
+                staticClass: "user-avatar",
+                attrs: {
+                  src: _vm.userProfile.avatar || "img/default-avatar.jpg",
+                  alt: _vm.userProfile.name + "'s profile picture",
+                },
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "user-details" }, [
+                _c("h2", { staticClass: "user-name" }, [
+                  _vm._v(_vm._s(_vm.userProfile.name)),
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "user-role" }, [
+                  _vm._v(_vm._s(_vm.userProfile.role)),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c("img", {
+                staticClass: "dropdown-icon",
+                attrs: { src: "img/dropdown.png", alt: "Dropdown icon" },
+              }),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "logout-button", on: { click: _vm.handleLogout } },
+            [_c("span", { staticClass: "logout-text" }, [_vm._v("Logout")])]
+          ),
+        ]),
+      ]),
       _vm._v(" "),
       _vm._m(3),
       _vm._v(" "),
@@ -42950,54 +43095,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("header", { staticClass: "header" }, [
-      _c("div", { staticClass: "search-container" }, [
-        _c("input", {
-          staticClass: "search-input",
-          attrs: { type: "text", placeholder: "Search" },
-        }),
-        _vm._v(" "),
-        _c("img", {
-          staticClass: "search-icon",
-          attrs: {
-            src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cd078eb6f9ce86265999269e4046c2dcec9bec7d140ae886d7ae3f419a2c7a16?placeholderIfAbsent=true&apiKey=02853cff8a504be0a91f61afb8cdbbcd",
-            alt: "Search icon",
-            loading: "lazy",
-          },
-        }),
-      ]),
+    return _c("div", { staticClass: "search-container" }, [
+      _c("input", {
+        staticClass: "search-input",
+        attrs: { type: "text", placeholder: "Search" },
+      }),
       _vm._v(" "),
-      _c("section", { staticClass: "dash-user-profile" }, [
-        _c("div", { staticClass: "user-info" }, [
-          _c("img", {
-            staticClass: "user-avatar",
-            attrs: {
-              src: "img/clarenceadmin.jpg",
-              alt: "Moni Roy's profile picture",
-            },
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "user-details" }, [
-            _c("h2", { staticClass: "user-name" }, [_vm._v("Gumball")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "user-role" }, [_vm._v("Admin")]),
-          ]),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "dropdown-icon",
-            attrs: { src: "img/dropdown.png", alt: "Dropdown icon" },
-          }),
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "logout-button hidden",
-            attrs: { id: "logout-button" },
-          },
-          [_c("span", { staticClass: "logout-text" }, [_vm._v("Logout")])]
-        ),
-      ]),
+      _c("img", {
+        staticClass: "search-icon",
+        attrs: {
+          src: "https://cdn.builder.io/api/v1/image/assets/TEMP/cd078eb6f9ce86265999269e4046c2dcec9bec7d140ae886d7ae3f419a2c7a16?placeholderIfAbsent=true&apiKey=02853cff8a504be0a91f61afb8cdbbcd",
+          alt: "Search icon",
+          loading: "lazy",
+        },
+      }),
     ])
   },
   function () {

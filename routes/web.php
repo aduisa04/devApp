@@ -40,4 +40,3 @@ Route::put('/users/{id}', [UserController::class, 'update']);
 Route::get('/doctors', [DoctorController::class, 'index'])->name('doctors.index');
 
 //clinic1
-

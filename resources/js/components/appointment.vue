@@ -30,7 +30,7 @@
           <div class="card" v-for="clinic in clinics" :key="clinic.id">
             <router-link :to="'/appointment/' + clinic.id">
               <!-- Clinic Logo -->
-              <img :src="clinic.logo" :alt="clinic.name + ' Logo'" class="sur" />
+              <img :src="getLogoUrl(clinic.logo)" :alt="clinic.name + ' Logo'" class="sur" />
               <h3>{{ clinic.name }}</h3>
             </router-link>
           </div>
@@ -85,33 +85,42 @@
       }
     },
     created() {
-      this.fetchClinics();
-      // Check if user data exists in localStorage
-      const userData = localStorage.getItem("0");
-      if (userData) {
-        const user = JSON.parse(userData);
-        this.firstName = user.first_name;
-        this.lastName = user.last_name;
-        this.profilePic = user.profile_picture || "/img/default-profile.jpg";
+      // Add authentication token to all axios requests
+      const token = localStorage.getItem('token'); // or however you store your auth token
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       }
       
-      // Also fetch latest data from API
+      this.fetchClinics();
       this.getUserProfile();
     },
     methods: {
-      fetchClinics() {
-        // Fetch clinics from the API
-        axios.get('/api/clinics')
-          .then(response => {
-            this.clinics = response.data;
-          })
-          .catch(error => {
-            console.error("There was an error fetching the clinics:", error);
+      async fetchClinics() {
+        try {
+          const response = await axios.get('/api/clinics', {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
           });
+          console.log('Clinics response:', response.data);
+          this.clinics = response.data;
+        } catch (error) {
+          console.error("There was an error fetching the clinics:", error);
+          if (error.response?.status === 401) {
+            // Handle unauthorized access - maybe redirect to login
+            this.$router.push('/login');
+          }
+        }
       },
       async getUserProfile() {
         try {
-          const response = await axios.get("/api/user");
+          const response = await axios.get("/api/user", {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          });
           if (response.data) {
             this.firstName = response.data.first_name;
             this.lastName = response.data.last_name;
@@ -119,6 +128,10 @@
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
+          if (error.response?.status === 401) {
+            // Handle unauthorized access - maybe redirect to login
+            this.$router.push('/login');
+          }
         }
       },
       async logout() {
@@ -129,7 +142,15 @@
         } catch (error) {
           console.error("Error logging out:", error);
         }
-      }
+      },
+      getLogoUrl(logo) {
+        // If the logo path starts with http or https, it's already a full URL
+        if (logo && (logo.startsWith('http://') || logo.startsWith('https://'))) {
+          return logo;
+        }
+        // Otherwise, prepend the complete storage path including images/clinics
+        return logo ? `/storage/images/clinics/${logo}` : '/img/default-clinic-logo.png';
+      },
     },
   };
   </script>

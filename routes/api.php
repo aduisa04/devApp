@@ -66,6 +66,15 @@ Route::get('/appointments', [AppointmentController::class, 'index']);
 
 Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 
+Route::middleware('auth:sanctum')->get('/user-profile', function (Request $request) {
+    $user = $request->user();
+    return response()->json([
+        'name' => $user->name,
+        'role' => $user->role,
+        'avatar' => $user->avatar
+    ]);
+});
+
 
 
 
